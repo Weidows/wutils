@@ -1,0 +1,51 @@
+{
+	"compiler": {
+		"version": "0.4.24+commit.e67f0147"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "name",
+				"outputs": [
+					{
+						"name": "",
+						"type": "string"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"methods": {}
+		},
+		"userdoc": {
+			"methods": {}
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"Remix/hello.sol": "Test"
+		},
+		"evmVersion": "byzantium",
+		"libraries": {},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"Remix/hello.sol": {
+			"keccak256": "0xae4403980e235ebd87148bde30f8c335487da2d5b50f3c53956104027999cdfe",
+			"urls": [
+				"bzzr://79341ef44544e63c7c17e98405dcb82505978bb7f340882cc19a00022580d997"
+			]
+		}
+	},
+	"version": 1
+}
