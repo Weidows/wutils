@@ -9,7 +9,9 @@
  * @!: *********************************************************************
 -->
 
-# demo-gmm
+> Some `demos` and `utils` in learning & developing golang.
+
+# Demo-gmm
 
 Golang package Mirror Manager
 
@@ -39,6 +41,6 @@ Sumdb use default https://sum.golang.org
 
 <a>![分割线](https://www.helloimg.com/images/2022/07/01/ZM0SoX.png)</a>
 
-# utils
+# Utils
 
 一些工具方法, 主要为了解决标准库中棘手/经常复用但没有的情况
