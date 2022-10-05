@@ -72,6 +72,7 @@ func main() {
 			Usage:   "change sumdb",
 			Action: func(cCtx *cli.Context) (err error) {
 				input := strings.ToLower(cCtx.Args().First())
+				// 不能带前面的 https, 会报错
 				s := PROXYS["sumdb"][input][8:]
 				if s != "" {
 					err = exec.Command("go", "env", "-w", "GOSUMDB="+s).Run()
