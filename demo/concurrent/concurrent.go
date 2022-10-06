@@ -10,17 +10,12 @@
  * @!: *********************************************************************
 */
 
-package main
+package concurrent
 
 import (
 	"fmt"
 	"time"
 )
-
-func main() {
-	//goroutine()
-	channel()
-}
 
 func goroutine() {
 	var say = func(s string) {
