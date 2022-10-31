@@ -1,4 +1,4 @@
-module Golang
+module github.com/Weidows/Golang
 
 go 1.19
 
