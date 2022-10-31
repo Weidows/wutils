@@ -13,30 +13,40 @@
 
 # Demo-gmm
 
-Golang package Mirror Manager
+- <details>
 
-```console
-╰─ gmm test
-proxys
-        352ms   aliyun
-        278ms   proxy-cn
-        642ms   proxy-io
-        269ms   baidu
-        1002ms  tencent
-        406ms   huawei
-        837ms   default
-sumdbs
-        2073ms  default
-        789ms   google
-        1957ms  sumdb-io
-```
+    <summary> Golang package Mirror Manager </summary>
 
-```console
-╰─ gmm proxy huawei                                                                                                pwsh   95  12:17:56  
-Proxy use huawei https://repo.huaweicloud.com/repository/goproxy
+  ***
 
-╰─ gmm sumdb default                                                                                              pwsh   95  12:17:17 
-Sumdb use default https://sum.golang.org
+    ```console
+    ╰─ gmm test
+    proxys
+            352ms   aliyun
+            278ms   proxy-cn
+            642ms   proxy-io
+            269ms   baidu
+            1002ms  tencent
+            406ms   huawei
+            837ms   default
+    sumdbs
+            2073ms  default
+            789ms   google
+            1957ms  sumdb-io
+    ```
+    
+    ```console
+    ╰─ gmm proxy huawei                                                                                                pwsh   95  12:17:56  
+    Proxy use huawei https://repo.huaweicloud.com/repository/goproxy
+    
+    ╰─ gmm sumdb default                                                                                              pwsh   95  12:17:17 
+    Sumdb use default https://sum.golang.org
+    ```
+
+  </details>
+
+```shell
+go install github.com/Weidows/Golang/tree/master/demo/gmm@latest
 ```
 
 <a>![分割线](https://www.helloimg.com/images/2022/07/01/ZM0SoX.png)</a>
