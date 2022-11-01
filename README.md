@@ -46,7 +46,7 @@
   </details>
 
 ```shell
-go install github.com/Weidows/Golang/tree/master/demo/gmm@latest
+go install github.com/Weidows/Golang/demo/gmm@latest
 ```
 
 <a>![分割线](https://www.helloimg.com/images/2022/07/01/ZM0SoX.png)</a>
