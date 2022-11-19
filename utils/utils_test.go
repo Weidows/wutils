@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"testing"
 )
@@ -64,4 +65,13 @@ func TestMarshal(t *testing.T) {
 		"width":    "1280",
 	})
 	fmt.Println(data)
+}
+
+func TestDecode(t *testing.T) {
+	resp, err := http.Get("https://api.btstu.cn/yan/api.php?charset=utf-8&encode=json")
+	if err != nil {
+		return
+	}
+	res := Decode[map[string]interface{}](resp.Body)
+	fmt.Println(res)
 }
