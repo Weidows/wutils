@@ -42,7 +42,7 @@ func TestConditionalEqual(t *testing.T) {
 }
 
 func TestGetMP4Duration(t *testing.T) {
-	file, err := os.Open("video.mp4")
+	file, err := os.Open("D:/Scoop/persist/steam/steamapps/workshop/content/431960/2882829381/3840x2160pro_1f460.mp4")
 	if err != nil {
 		panic(err)
 	}
@@ -51,4 +51,17 @@ func TestGetMP4Duration(t *testing.T) {
 		panic(err)
 	}
 	fmt.Println(duration)
+}
+
+func TestMarshal(t *testing.T) {
+	data := Marshal(map[string]string{
+		"duration": "16",
+		"hash":     "b2146aae9e9f807b7b8c17fcc531addedaff6670a37481cf185133be42a31d25",
+		"height":   "720",
+		"name":     "video.mp4",
+		"path":     "/mnt/test_data/Movie/1Marvel/10001",
+		"size":     "6901",
+		"width":    "1280",
+	})
+	fmt.Println(data)
 }
