@@ -19,7 +19,7 @@ func send() {
 }
 
 // channel 并没有读写顺序
-func main() {
+func csp() {
 	go send()
 	go receive()
 

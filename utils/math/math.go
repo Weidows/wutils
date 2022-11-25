@@ -1,4 +1,4 @@
-package utils
+package math
 
 // Pow calculates n to the mth power. Since the result is an int, it is assumed that m is a positive power
 func Pow(n, m int) (result int) {

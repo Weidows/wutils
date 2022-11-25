@@ -4,7 +4,7 @@
  * @Date: 2022-05-25 17:34:28
  * @LastEditors: Weidows
  * @LastEditTime: 2022-05-25 22:38:23
- * @FilePath: \Golang\src\demo\concurrent.go
+ * @FilePath: \Golang\src\demo\goroutine.go
  * @Description: 简易协程调用/通信
 	https://www.runoob.com/go/go-concurrent.html
  * @!: *********************************************************************

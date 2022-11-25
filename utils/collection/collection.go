@@ -1,6 +1,6 @@
-package utils
+package collection
 
-func ForEach[T any](array []T, f func(index int, value T)) {
+func ForEach[T any | []any](array []T, f func(index int, value T)) {
 	for i, v := range array {
 		f(i, v)
 	}

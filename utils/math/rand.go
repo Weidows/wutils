@@ -1,4 +1,4 @@
-package utils
+package math
 
 import (
 	"fmt"
@@ -6,6 +6,10 @@ import (
 	"strconv"
 	"time"
 )
+
+func init() {
+	fmt.Println("math")
+}
 
 func GetRandNum(digit int) (res string) {
 	if digit < 1 {
