@@ -11,11 +11,27 @@
 
 > Some `demos` and `utils` in learning & developing golang.
 
-# Demo-gmm
+<a>![分割线](https://www.helloimg.com/images/2022/07/01/ZM0SoX.png)</a>
 
 - <details>
 
-    <summary> Golang package Mirror Manager </summary>
+    <summary> dsg | Disk sleep guard, 防止硬盘睡眠 </summary>
+
+  ```shell
+  go install github.com/Weidows/Golang/cmd/dsg@latest
+  ```
+
+  ***
+
+  </details>
+
+- <details>
+
+    <summary> gmm | Golang package Mirror Manager</summary>
+
+  ```shell
+  go install github.com/Weidows/Golang/cmd/gmm@latest
+  ```
 
   ***
 
@@ -34,7 +50,7 @@
             789ms   google
             1957ms  sumdb-io
     ```
-    
+
     ```console
     ╰─ gmm proxy huawei                                                                                                pwsh   95  12:17:56  
     Proxy use huawei https://repo.huaweicloud.com/repository/goproxy
@@ -44,10 +60,6 @@
     ```
 
   </details>
-
-```shell
-go install github.com/Weidows/Golang/demo/gmm@latest
-```
 
 <a>![分割线](https://www.helloimg.com/images/2022/07/01/ZM0SoX.png)</a>
 
