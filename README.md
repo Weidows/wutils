@@ -23,6 +23,19 @@
 
   ***
 
+  ```console
+  > .\dsg.exe                                                                                                                                                                                                                                                               
+  time="2022-12-05T15:33:41+08:00" level=info msg="utils.go init()"                                                                                                                                                                                                         
+  please start with params like: 'dsg.exe E: 30'
+          1. disk
+          2. delay seconds
+  
+  
+  > .\dsg.exe D: 3                                                                                                                    
+  time="2022-12-05T15:36:18+08:00" level=info msg="utils.go init()"                                                                   
+  2 / 3 [----------------------------------------------------------------------------->______________________________________] 66.67%
+  ```
+
   </details>
 
 - <details>
