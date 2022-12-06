@@ -20,7 +20,6 @@ func init() {
 
 	// 设置日志级别为warn以上
 	logrus.SetLevel(logrus.WarnLevel)
-	log.Println("utils.go init()")
 }
 
 func GetLogger() *logrus.Logger {

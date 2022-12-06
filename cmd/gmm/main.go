@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
+	"github.com/Weidows/Golang/utils/collection"
 	"github.com/urfave/cli/v2"
 	"log"
 	"net/http"
 	"os"
 	"os/exec"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -29,6 +31,11 @@ var (
 			"sumdb-io": "https://gosum.io",
 		},
 	}
+	timeCost = map[string]map[int64]string{
+		"proxy": make(map[int64]string),
+		"sumdb": make(map[int64]string),
+	}
+	wg sync.WaitGroup
 )
 
 func main() {
@@ -41,10 +48,13 @@ func main() {
 				for k, v := range PROXYS {
 					fmt.Println(k)
 					for key, value := range v {
-						start := time.Now().UnixMilli()
-						_, err = http.Get(value)
-						timeCost := time.Now().UnixMilli() - start
-						fmt.Printf("\t%dms\t%s\n", timeCost, key)
+						wg.Add(1)
+						go ping(k, value, key)
+					}
+					wg.Wait()
+					sortedTimes := collection.SortByKeys[int64](timeCost[k])
+					for _, v1 := range sortedTimes {
+						fmt.Printf("\t%dms\t%s\n", v1, timeCost[k][v1])
 					}
 				}
 				return err
@@ -98,4 +108,11 @@ func main() {
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func ping(k string, value string, key string) {
+	defer wg.Done()
+	start := time.Now().UnixMilli()
+	_, _ = http.Get(value)
+	timeCost[k][time.Now().UnixMilli()-start] = key
 }
