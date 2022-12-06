@@ -13,6 +13,8 @@
 
 <a>![分割线](https://www.helloimg.com/images/2022/07/01/ZM0SoX.png)</a>
 
+# cmd
+
 - <details>
 
     <summary> dsg | Disk sleep guard, 防止硬盘睡眠 </summary>
@@ -76,6 +78,6 @@
 
 <a>![分割线](https://www.helloimg.com/images/2022/07/01/ZM0SoX.png)</a>
 
-# Utils
+# utils
 
 一些工具方法, 主要为了解决标准库中棘手/经常复用但没有的情况
