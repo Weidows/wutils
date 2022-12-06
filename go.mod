@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/aliyunmq/mq-http-go-sdk v1.0.3
 	github.com/cheggaaa/pb/v3 v3.0.8
+	github.com/go-ping/ping v1.1.0
 	github.com/gogap/errors v0.0.0-20210818113853-edfbba0ddea9
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli/v2 v2.17.1
@@ -21,6 +22,7 @@ require (
 	github.com/fatih/color v1.10.0 // indirect
 	github.com/gogap/stack v0.0.0-20150131034635-fef68dddd4f8 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/google/uuid v1.2.0 // indirect
 	github.com/klauspost/compress v1.15.9 // indirect
 	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/mattn/go-isatty v0.0.12 // indirect
@@ -31,6 +33,7 @@ require (
 	github.com/valyala/fasthttp v1.41.0 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	golang.org/x/net v0.0.0-20220906165146-f3363e06e74c // indirect
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/sys v0.0.0-20220728004956-3c1f35247d10 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
