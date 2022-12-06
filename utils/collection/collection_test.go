@@ -1,7 +1,6 @@
 package collection
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -10,15 +9,15 @@ func TestForEach(t *testing.T) {
 		1, 2, 3, 4, 5,
 	}
 	ForEach(arr, func(i, v int) {
-		println(i, v)
+		logger.Println(i, v)
 	})
 }
 
-func TestMapToArray(t *testing.T) {
-	keys, values := MapToArray(map[string]int{
+func TestMapToSlice(t *testing.T) {
+	keys, values := MapToSlice(map[string]int{
 		"1": 11,
 		"2": 22,
 	})
-	fmt.Println(keys)
-	fmt.Println(values)
+	logger.Println(keys)
+	logger.Println(values)
 }
