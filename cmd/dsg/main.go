@@ -40,8 +40,9 @@ func parseArgs(args []string) *os.File {
 	}
 
 	f := strings.Join([]string{args[1], ".dsg"}, "/")
-	if err := os.Remove(f); err != nil {
-		logger.Printf("file: '%s' state error, maybe not exist or use by other processes", f)
+	// RemoveAll 不会因为文件不存在 return error
+	if err := os.RemoveAll(f); err != nil {
+		logger.Printf("file: '%s' state error, maybe use by other processes", f)
 		return nil
 	}
 	file, err := os.OpenFile(f, os.O_RDWR|os.O_CREATE, 0755)

@@ -5,7 +5,6 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"github.com/Weidows/Golang/utils/log"
-	"github.com/sirupsen/logrus"
 	"hash"
 	"io"
 	"os"
@@ -17,12 +16,8 @@ const (
 )
 
 var (
-	logger *logrus.Logger
-)
-
-func init() {
 	logger = log.GetLogger()
-}
+)
 
 func SumString[S interface{ string | []byte }](str S, choice int) string {
 	var h any
