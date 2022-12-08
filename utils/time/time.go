@@ -1,36 +1,43 @@
 package time
 
 import (
+	"github.com/Weidows/Golang/utils/cast"
+	"github.com/Weidows/Golang/utils/log"
 	"time"
 )
 
-// WithTimeOut 超时退出
+var (
+	logger = log.GetLogger()
+)
+
+// WithTimeOut 超时退出返回 nil
 //
-// var res string
+// From: https://geektutu.com/post/hpg-timeout-goroutine.html
 //
-//	WithTimeOut(time.Duration(800*time.Millisecond), func() {
+//	WithTimeOut(800*time.Millisecond, func () int {
 //		time.Sleep(time.Millisecond)
-//		res += "1"
+//		return 1
+//	}) // 1
 //
+//	WithTimeOut(800*time.Millisecond, func () string {
 //		time.Sleep(time.Second)
-//		res += "2"
-//	})
-//
-// println(res) // 1
-func WithTimeOut(timeOut time.Duration, fn func()) {
-	done := make(chan any, 1)
+//		return "2"
+//	}) // nil
+func WithTimeOut[T any](timeOut time.Duration, fn func() T) T {
+	done := make(chan T, 1)
 
 	go func() {
-		fn()
-		done <- nil
+		// fmt.Println(unsafe.Sizeof(struct{}{}))  // 0
+		//done <- struct{}{}
+		done <- fn()
 	}()
 
 	// 阻塞等待
 	select {
-	case _ = <-done:
-		return
+	case d := <-done:
+		return d
 	case <-time.After(timeOut):
 		//fmt.Println("timeout!!!")
-		return
+		return cast.EmptyT[T]()
 	}
 }

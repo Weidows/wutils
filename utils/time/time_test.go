@@ -6,13 +6,13 @@ import (
 )
 
 func TestWithTimeOut(t *testing.T) {
-	var res string
-	WithTimeOut(800*time.Millisecond, func() {
+	logger.Println(WithTimeOut(800*time.Millisecond, func() int {
 		time.Sleep(time.Millisecond)
-		res += "1"
+		return 1
+	})) // 1
 
+	logger.Println(WithTimeOut(800*time.Millisecond, func() string {
 		time.Sleep(time.Second)
-		res += "2"
-	})
-	println(res) // 1
+		return "2"
+	})) // nil
 }
