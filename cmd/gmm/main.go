@@ -2,9 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/Weidows/Golang/utils/collection"
-	time2 "github.com/Weidows/Golang/utils/time"
-	"github.com/urfave/cli/v2"
 	"log"
 	"net/http"
 	"os"
@@ -12,6 +9,10 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/Weidows/Golang/utils/collection"
+	time2 "github.com/Weidows/Golang/utils/time"
+	"github.com/urfave/cli/v2"
 )
 
 // https://github.com/eryajf/Thanks-Mirror#go
@@ -114,8 +115,9 @@ func main() {
 func ping(k string, value string, key string) {
 	defer wg.Done()
 	start := time.Now().UnixMilli()
-	time2.WithTimeOut(time.Second*3, func() {
+	time2.WithTimeOut(time.Second*3, func() string {
 		_, _ = http.Get(value)
+		return ""
 	})
 	timeCost[k][time.Now().UnixMilli()-start] = key
 }

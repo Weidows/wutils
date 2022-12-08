@@ -3,8 +3,8 @@
  * @Author: Weidows
  * @Date: 2022-08-30 14:51:11
  * @LastEditors: Weidows
- * @LastEditTime: 2022-09-01 18:57:17
- * @FilePath: \Gmm\README.md
+ * @LastEditTime: 2022-12-08 18:25:00
+ * @FilePath: \Golang\README.md
  * @Description:
  * @!: *********************************************************************
 -->
@@ -26,7 +26,7 @@
   ***
 
   ```console
-  > .\dsg.exe                                                                                                                                                                                                                                                               
+  > .\dsg.exe
   please start with params like: 'dsg.exe E: 30'
           1. disk
           2. delay seconds
@@ -48,29 +48,32 @@
 
   ***
 
-    ```console
-    ╰─ gmm test
-    proxys
-            352ms   aliyun
-            278ms   proxy-cn
-            642ms   proxy-io
-            269ms   baidu
-            1002ms  tencent
-            406ms   huawei
-            837ms   default
-    sumdbs
-            2073ms  default
-            789ms   google
-            1957ms  sumdb-io
-    ```
+  - [x] 结果排序
+  - [x] 协程加速
 
-    ```console
-    ╰─ gmm proxy huawei                                                                                                pwsh   95  12:17:56  
-    Proxy use huawei https://repo.huaweicloud.com/repository/goproxy
-    
-    ╰─ gmm sumdb default                                                                                              pwsh   95  12:17:17 
-    Sumdb use default https://sum.golang.org
-    ```
+  ```console
+  > gmm test
+  proxy
+          125ms   huawei
+          178ms   baidu
+          219ms   aliyun
+          338ms   proxy-cn
+          476ms   default
+          612ms   proxy-io
+          623ms   tencent
+  sumdb
+          433ms   google
+          451ms   default
+          743ms   sumdb-io
+  ```
+
+  ```console
+  ╰─ gmm proxy huawei
+  Proxy use huawei https://repo.huaweicloud.com/repository/goproxy
+
+  ╰─ gmm sumdb default
+  Sumdb use default https://sum.golang.org
+  ```
 
   </details>
 
