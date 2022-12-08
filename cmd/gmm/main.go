@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/Weidows/Golang/utils/collection"
+	time2 "github.com/Weidows/Golang/utils/time"
 	"github.com/urfave/cli/v2"
 	"log"
 	"net/http"
@@ -113,6 +114,8 @@ func main() {
 func ping(k string, value string, key string) {
 	defer wg.Done()
 	start := time.Now().UnixMilli()
-	_, _ = http.Get(value)
+	time2.WithTimeOut(time.Second*3, func() {
+		_, _ = http.Get(value)
+	})
 	timeCost[k][time.Now().UnixMilli()-start] = key
 }
