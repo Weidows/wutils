@@ -1,6 +1,19 @@
 package cast
 
-import "strconv"
+import (
+	"github.com/Weidows/Golang/utils/log"
+	"github.com/howcrazy/xconv"
+	"strconv"
+)
+
+var (
+	logger = log.GetLogger()
+)
+
+func Convert[T any](src any) (res T) {
+	xconv.Convert(src, &res)
+	return res
+}
 
 func ToIntSlice(i interface{}) (r []int) {
 	switch v := i.(type) {
