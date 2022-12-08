@@ -5,10 +5,10 @@ go 1.19
 require (
 	github.com/aliyunmq/mq-http-go-sdk v1.0.3
 	github.com/cheggaaa/pb/v3 v3.0.8
-	github.com/cuigh/auxo v0.0.0-20221119091922-437d952baa9c
 	github.com/go-ping/ping v1.1.0
 	github.com/gogap/errors v0.0.0-20210818113853-edfbba0ddea9
-	github.com/gookit/goutil v0.6.0
+	github.com/gogo/protobuf v1.3.2
+	github.com/howcrazy/xconv v0.0.0-20161022181602-be3d9669d8c2
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli/v2 v2.17.1
 	github.com/zinclabs/sdk-go-zincsearch v0.3.3
@@ -37,7 +37,6 @@ require (
 	golang.org/x/net v0.0.0-20220906165146-f3363e06e74c // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.0.0-20220829200755-d48e67d00261 // indirect
-	golang.org/x/text v0.4.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 )

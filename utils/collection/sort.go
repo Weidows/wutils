@@ -1,58 +1,58 @@
 package collection
 
 import (
-	cast2 "github.com/Weidows/Golang/utils/cast"
+	"github.com/Weidows/Golang/utils/cast"
 	"github.com/Weidows/Golang/utils/reflect"
-	"github.com/cuigh/auxo/util/cast"
+	"github.com/gogo/protobuf/sortkeys"
 	"sort"
 )
 
-func SortByRow() {
-
-}
-
-func SortByColumn() {
-
-}
-
-// SortByKeys
+// SortKeys
 //
 // From: https://studygolang.com/articles/10530
-func SortByKeys[K MapKeys, V any, T interface{ []K }](m map[K]V) T {
+func SortKeys[K MapKeys, V any, T interface{ []K }](m map[K]V) T {
 	if len(m) == 0 {
 		return nil
 	}
 
 	keys, _ := MapToSlice(m)
-	var sorted any
-	reflect.Typeof(keys, func(a any) {
-		switch t := a.(type) {
-		case []int:
-			sort.Ints(a.([]int))
-			sorted = a
-		case []int32:
-			s := cast2.ToIntSlice(a)
-			sort.Ints(s)
-			sorted = cast.ToInt32Slice(s)
-		case []int64:
-			s := cast2.ToIntSlice(a)
-			sort.Ints(s)
-			sorted = cast.ToInt64Slice(s)
-		case []string:
-			sort.Strings(a.([]string))
-			sorted = a
-		case []float32, []float64:
-			f := cast2.ToFloat64Slice(a)
-			sort.Float64s(f)
-			sorted = f
-		default:
-			_ = t
-		}
-	})
-
+	sorted := SortSlice(keys)
 	//res := make([]K, len(keys))
 	//for i, v := range sorted.([]K) {
 	//	res[i] = reflect2.ValueOf(v).Convert(reflect2.TypeOf(keys[0])).Interface().(K)
 	//}
-	return sorted.([]K)
+	return sorted
+}
+
+// SortableTypes : MapKeys 的超集
+type SortableTypes interface {
+	int | int8 | int32 | int64 | string | float32 | float64 | uint | uint8 | uint16 | uint32 | uint64 | any
+}
+
+func SortSlice[T SortableTypes](slice []T) (sorted []T) {
+	reflect.TypeofT(slice, func(a any) {
+		switch t := a.(type) {
+		case []int:
+			sort.Ints(a.([]int))
+		case []int8:
+			s := cast.Convert[[]int](a)
+			sort.Ints(s)
+			a = cast.Convert[[]int8](s)
+		case []int32:
+			sortkeys.Int32s(a.([]int32))
+		case []int64:
+			sortkeys.Int64s(a.([]int64))
+		case []string:
+			sort.Strings(a.([]string))
+		case []float32:
+			sortkeys.Float32s(a.([]float32))
+		case []float64:
+			sort.Float64s(a.([]float64))
+		default:
+			logger.Println("Unsupported type")
+			_ = t
+		}
+		sorted = a.([]T)
+	})
+	return sorted
 }

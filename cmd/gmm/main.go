@@ -53,7 +53,7 @@ func main() {
 						go ping(k, value, key)
 					}
 					wg.Wait()
-					sortedTimes := collection.SortByKeys[int64](timeCost[k])
+					sortedTimes := collection.SortKeys[int64](timeCost[k])
 					for _, v1 := range sortedTimes {
 						fmt.Printf("\t%dms\t%s\n", v1, timeCost[k][v1])
 					}

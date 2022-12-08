@@ -13,7 +13,7 @@ func ForEach[T any | []any](array []T, f func(index int, value T)) {
 }
 
 type MapKeys interface {
-	int | int32 | int64 | string | float32 | float64
+	int | int8 | int32 | int64 | string | float32 | float64 | uint | uint8 | uint16 | uint32 | uint64
 }
 
 func MapToSlice[K MapKeys, V any](m map[K]V) (keys []K, values []V) {
