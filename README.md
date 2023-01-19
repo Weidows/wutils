@@ -51,6 +51,8 @@
   - [x] 结果排序
   - [x] 协程加速
 
+  ***
+
   ```console
   > gmm test
   proxy
@@ -82,3 +84,12 @@
 # utils
 
 一些工具方法, 主要为了解决标准库中棘手/经常复用但没有的情况
+
+<a>![分割线](https://www.helloimg.com/images/2022/07/01/ZM0SoX.png)</a>
+
+# clean
+
+```shell
+go get -u all
+go mod tidy
+```

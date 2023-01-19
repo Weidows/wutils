@@ -17,7 +17,7 @@ import (
 
 // https://github.com/eryajf/Thanks-Mirror#go
 var (
-	PROXYS = map[string]map[string]string{
+	proxyList = map[string]map[string]string{
 		"proxy": {
 			"default":  "https://proxy.golang.org",
 			"aliyun":   "https://mirrors.aliyun.com/goproxy",
@@ -47,14 +47,14 @@ func main() {
 			Aliases: []string{"t"},
 			Usage:   "Speed test",
 			Action: func(cCtx *cli.Context) (err error) {
-				for k, v := range PROXYS {
+				for k, v := range proxyList {
 					fmt.Println(k)
 					for key, value := range v {
 						wg.Add(1)
 						go ping(k, value, key)
 					}
 					wg.Wait()
-					sortedTimes := collection.SortKeys[int64](timeCost[k])
+					sortedTimes := collection.SortKeys(timeCost[k])
 					for _, v1 := range sortedTimes {
 						fmt.Printf("\t%dms\t%s\n", v1, timeCost[k][v1])
 					}
@@ -68,7 +68,7 @@ func main() {
 			Usage:   "change proxy",
 			Action: func(cCtx *cli.Context) (err error) {
 				input := strings.ToLower(cCtx.Args().First())
-				s := PROXYS["proxy"][input]
+				s := proxyList["proxy"][input]
 				if s != "" {
 					err = exec.Command("go", "env", "-w", "GOPROXY="+s+",direct").Run()
 					fmt.Println("Proxy use "+input, s)
@@ -85,7 +85,7 @@ func main() {
 			Action: func(cCtx *cli.Context) (err error) {
 				input := strings.ToLower(cCtx.Args().First())
 				// 不能带前面的 https, 会报错
-				s := PROXYS["sumdb"][input][8:]
+				s := proxyList["sumdb"][input][8:]
 				if s != "" {
 					err = exec.Command("go", "env", "-w", "GOSUMDB="+s).Run()
 					fmt.Println("Sumdb use "+input, s)

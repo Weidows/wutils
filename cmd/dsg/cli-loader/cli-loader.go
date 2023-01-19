@@ -5,7 +5,7 @@
  * @LastEditors: Weidows
  * @LastEditTime: 2022-05-25 22:18:09
  * @FilePath: \Golang\src\demo\cli-loader.go
- * @Description: cli-进度条
+ * @Description: cli-进度条 demo
  * @!: *********************************************************************
  */
 
@@ -17,6 +17,7 @@ import (
 	"github.com/cheggaaa/pb/v3"
 )
 
+// 进度条在 test 中运行会有显示问题
 func main() {
 	count := 1000
 	// create and start new bar

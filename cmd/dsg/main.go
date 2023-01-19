@@ -11,53 +11,60 @@ import (
 )
 
 var (
-	logger = log.GetLogger()
-	count  = 30
+	logger   = log.GetLogger()
+	filePath string
+	count    = 30
 )
 
-func main() {
-	file := parseArgs(os.Args)
-
-	bar := pb.Simple.Start(count)
-	for file != nil {
-		for i := 0; i < count; i++ {
-			bar.Increment()
-			time.Sleep(time.Second)
-		}
-		_, _ = file.WriteString("dsg running at " + time.Now().String() + "\n")
-		bar.SetCurrent(0)
-	}
-}
-
-func parseArgs(args []string) *os.File {
+func init() {
+	args := os.Args
 	if len(args) == 1 {
 		fmt.Println(
 			"please start with params like: 'dsg.exe E: 30'\n",
 			"\t1. disk\n",
 			"\t2. delay seconds",
 		)
-		return nil
+		return
 	}
 
 	f := strings.Join([]string{args[1], ".dsg"}, "/")
 	// RemoveAll 不会因为文件不存在 return error
 	if err := os.RemoveAll(f); err != nil {
 		logger.Printf("file: '%s' state error, maybe use by other processes", f)
-		return nil
+		return
 	}
-	file, err := os.OpenFile(f, os.O_RDWR|os.O_CREATE, 0755)
-	if err != nil {
-		logger.Println("disk format error, please input like 'E:'", err)
-		return nil
-	}
+	filePath = f
 
 	if len(args) > 2 {
 		c, err := strconv.Atoi(args[2])
 		if err != nil {
 			logger.Println("delay seconds number is not valid.")
-			return nil
+			return
 		}
 		count = c
 	}
+}
+
+func main() {
+	bar := pb.Simple.Start(count)
+	for {
+		for i := 0; i < count; i++ {
+			bar.Increment()
+			time.Sleep(time.Second)
+		}
+		file := openFile()
+		_, _ = file.WriteString("dsg running at " + time.Now().String() + "\n")
+		_ = file.Close()
+		bar.SetCurrent(0)
+	}
+}
+
+func openFile() *os.File {
+	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0755)
+	if err != nil {
+		logger.Println("disk format error, please input like 'E:'", err)
+		return nil
+	}
+
 	return file
 }

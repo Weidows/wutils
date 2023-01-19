@@ -17,6 +17,7 @@ type boxHeader struct {
 // GetMP4Duration 获取视频时长，以秒计
 //
 // Modified from https://github.com/akkuman/mp4info
+// 另一个借助 FFmpeg 更完善好用的: https://github.com/salixleaf/media
 func GetMP4Duration(reader io.ReaderAt) (lengthOfTime time.Duration, err error) {
 	var (
 		info   = make([]byte, 0x10)
