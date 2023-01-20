@@ -58,7 +58,7 @@ func main() {
 }
 
 func WriteString() {
-	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0755)
+	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		logger.Println("disk format error, please input like 'E:'", err)
 		return
