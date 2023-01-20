@@ -52,19 +52,17 @@ func main() {
 			bar.Increment()
 			time.Sleep(time.Second)
 		}
-		file := openFile()
-		_, _ = file.WriteString("dsg running at " + time.Now().String() + "\n")
-		_ = file.Close()
+		go WriteString()
 		bar.SetCurrent(0)
 	}
 }
 
-func openFile() *os.File {
+func WriteString() {
 	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0755)
 	if err != nil {
 		logger.Println("disk format error, please input like 'E:'", err)
-		return nil
+		return
 	}
-
-	return file
+	_, _ = file.WriteString("dsg running at " + time.Now().String() + "\n")
+	_ = file.Close()
 }
