@@ -9,6 +9,7 @@ require (
 	github.com/gogap/errors v0.0.0-20210818113853-edfbba0ddea9
 	github.com/gogo/protobuf v1.3.2
 	github.com/howcrazy/xconv v0.0.0-20161022181602-be3d9669d8c2
+	github.com/magiconair/properties v1.8.7
 	github.com/sirupsen/logrus v1.9.0
 	github.com/urfave/cli/v2 v2.17.1
 	github.com/zinclabs/sdk-go-zincsearch v0.3.3
