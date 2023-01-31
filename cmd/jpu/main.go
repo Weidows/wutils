@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/magiconair/properties"
 	"os"
 	"os/exec"
@@ -13,9 +14,8 @@ var (
 )
 
 func init() {
-	args := os.Args
-	if len(args) > 0 {
-		appPath = args[0]
+	appPath = os.Getenv("JPU_PATH")
+	if appPath != "" {
 		return
 	}
 
@@ -25,6 +25,7 @@ func init() {
 }
 
 func main() {
+	fmt.Println("Using app path: ", appPath)
 	ides, err := os.ReadDir(appPath)
 	if err != nil {
 		return

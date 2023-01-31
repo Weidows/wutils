@@ -88,7 +88,8 @@
   ```
 
   ```shell
-  jpu D:/Scoop/persist/jetbrains-toolbox/apps
+  echo "Default to use $SCOOP/persist/jetbrains-toolbox/apps"
+  set JPU_PATH=D:/Scoop/persist/jetbrains-toolbox/apps && jpu.exe 
   ```
 
   ***
