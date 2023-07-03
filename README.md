@@ -3,15 +3,15 @@
  * @Author: Weidows
  * @Date: 2022-08-30 14:51:11
  * @LastEditors: Weidows
- * @LastEditTime: 2022-12-08 18:25:00
- * @FilePath: \Golang\README.md
+ * @LastEditTime: 2023-03-31 18:30:02
+ * @FilePath: \Weidows\Golang\README.md
  * @Description:
  * @!: *********************************************************************
 -->
 
 > Some `demos` and `utils` in learning & developing golang.
 
-<a>![分割线](https://www.helloimg.com/images/2022/07/01/ZM0SoX.png)</a>
+<a>![分割线](https://cdn.jsdelivr.net/gh/Weidows/Weidows/image/divider.png)</a>
 
 # cmd
 
@@ -89,13 +89,13 @@
 
   ```shell
   echo "Default to use $SCOOP/persist/jetbrains-toolbox/apps"
-  set JPU_PATH=D:/Scoop/persist/jetbrains-toolbox/apps && jpu.exe 
+  set JPU_PATH=D:/Scoop/persist/jetbrains-toolbox/apps && jpu.exe
   ```
 
   ***
 
   通过改配置实现 Portable 效果
-  
+
   ```
   - PyCharm-P
       - ch-0
@@ -110,25 +110,25 @@
   - Goland
   - datagrip
   ```
-  
+
   在 `IDE/bin/idea.properties` 顶部添加
-  
+
   ```properties
   idea.config.path=${idea.home.path}/../../config
   idea.system.path=${idea.home.path}/../../system
   ```
-  
+
   由于路径中含带版本号, 用脚本不易操作, 所以用 go 写
 
   </details>
 
-<a>![分割线](https://www.helloimg.com/images/2022/07/01/ZM0SoX.png)</a>
+<a>![分割线](https://cdn.jsdelivr.net/gh/Weidows/Weidows/image/divider.png)</a>
 
 # utils
 
 一些工具方法, 主要为了解决标准库中棘手/经常复用但没有的情况
 
-<a>![分割线](https://www.helloimg.com/images/2022/07/01/ZM0SoX.png)</a>
+<a>![分割线](https://cdn.jsdelivr.net/gh/Weidows/Weidows/image/divider.png)</a>
 
 # clean
 
