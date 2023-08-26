@@ -129,10 +129,3 @@
 一些工具方法, 主要为了解决标准库中棘手/经常复用但没有的情况
 
 <a>![分割线](https://cdn.jsdelivr.net/gh/Weidows/Weidows/image/divider.png)</a>
-
-# clean
-
-```shell
-go get -u all
-go mod tidy
-```
