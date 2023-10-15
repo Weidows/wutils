@@ -3,7 +3,7 @@
 Disk sleep guard, 防止硬盘睡眠
 
 ```shell
-go install github.com/Weidows/Golang/cmd/dsg@latest
+go install github.com/Weidows/Golang/cmd/dsg
 ```
 
 ***

@@ -8,7 +8,7 @@ Golang package Mirror Manager
 ***
 
 ```shell
-go install github.com/Weidows/Golang/cmd/gmm@latest
+go install github.com/Weidows/Golang/cmd/gmm
 ```
 
 ***

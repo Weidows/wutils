@@ -3,7 +3,7 @@
 Jetbrains Portable Upgrader
 
 ```shell
-go install github.com/Weidows/Golang/cmd/jpu@latest
+go install github.com/Weidows/Golang/cmd/jpu
 ```
 
 ```shell
