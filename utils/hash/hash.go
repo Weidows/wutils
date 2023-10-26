@@ -58,3 +58,11 @@ func SumFile(filePath string, choice int) string {
 	}
 	return fmt.Sprintf("%x", h.Sum(nil))
 }
+
+func CompareFile(filePath1, filePath2 string) bool {
+	hash1 := SumFile(filePath1, Md5)
+	hash2 := SumFile(filePath2, Md5)
+	fileInfo1, _ := os.Stat(filePath1)
+	fileInfo2, _ := os.Stat(filePath2)
+	return hash1 == hash2 && fileInfo1.Size() == fileInfo2.Size()
+}
