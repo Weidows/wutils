@@ -36,8 +36,13 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-        with:
-          set-safe-directory: '*'
+      #        with:
+      #          set-safe-directory: '*'
+
+      - name: My-Tasks
+        run: |
+          git config --global --add safe.directory *
+
       # https://github.com/posener/goreadme
       - name: Update readme according to Go doc
         uses: posener/goreadme@v1
