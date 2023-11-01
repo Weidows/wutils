@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Weidows/Golang/utils/collection"
-	time2 "github.com/Weidows/Golang/utils/time"
+	"github.com/Weidows/wutils/utils/collection"
+	time2 "github.com/Weidows/wutils/utils/time"
 	"github.com/urfave/cli/v2"
 )
 

@@ -1,8 +1,9 @@
+// dsg
 package main
 
 import (
 	"fmt"
-	"github.com/Weidows/Golang/utils/log"
+	"github.com/Weidows/wutils/utils/log"
 	"github.com/cheggaaa/pb/v3"
 	"os"
 	"strconv"

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/Weidows/Golang/utils/files"
-	"github.com/Weidows/Golang/utils/hash"
+	"github.com/Weidows/wutils/utils/files"
+	"github.com/Weidows/wutils/utils/hash"
 	"log"
 	"os"
 	"path"

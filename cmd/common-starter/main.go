@@ -1,3 +1,4 @@
+// common-starter
 package main
 
 import (
