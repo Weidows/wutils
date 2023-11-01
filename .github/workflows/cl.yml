@@ -38,10 +38,12 @@ jobs:
         uses: actions/checkout@v2
       #        with:
       #          set-safe-directory: '*'
+      - name: Debugging with ssh
+        uses: lhotari/action-upterm@v1
 
       - name: My-Tasks
         run: |
-          git config --global --add safe.directory *
+          git config --add safe.directory *
 
       # https://github.com/posener/goreadme
       - name: Update readme according to Go doc
@@ -54,5 +56,3 @@ jobs:
           # Optional: Token allows goreadme to comment the PR with diff preview.
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
 
-      - name: Debugging with ssh
-        uses: lhotari/action-upterm@v1

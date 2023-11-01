@@ -7,7 +7,7 @@ import (
 )
 
 func TestGetMP4Duration(t *testing.T) {
-	file, err := os.Open("D:/Scoop/persist/steam/steamapps/workshop/content/431960/2882829381/3840x2160pro_1f460.mp4")
+	file, err := os.Open("./2e3ce48952af857ccbecb2e8f7ff52c6.mp4")
 	if err != nil {
 		panic(err)
 	}
