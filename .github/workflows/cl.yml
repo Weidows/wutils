@@ -2,7 +2,7 @@ name: go-test
 
 on:
   push:
-    branches: [master]
+    branches: [ master ]
     paths:
       - "**/*.go"
       - ".github/workflows/ci.yml"
@@ -36,6 +36,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
+        with:
+          set-safe-directory: '*'
+      # https://github.com/posener/goreadme
       - name: Update readme according to Go doc
         uses: posener/goreadme@v1
         with:
