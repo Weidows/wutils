@@ -1,6 +1,8 @@
 package net
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestPing(t *testing.T) {
 	p := Ping("github.com")

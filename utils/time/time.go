@@ -41,3 +41,9 @@ func WithTimeOut[T any](timeOut time.Duration, fn func() T) T {
 		return cast.EmptyT[T]()
 	}
 }
+
+func TimeCosts(fn func()) time.Duration {
+	t := time.Now()
+	fn()
+	return time.Now().Sub(t)
+}
