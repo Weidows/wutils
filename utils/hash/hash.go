@@ -4,7 +4,7 @@ import (
 	"crypto/md5"
 	"crypto/sha256"
 	"fmt"
-	"github.com/Weidows/Golang/utils/log"
+	"github.com/Weidows/wutils/utils/log"
 	"hash"
 	"io"
 	"os"

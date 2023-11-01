@@ -3,6 +3,6 @@ Package utils are some utils function may meet some embarrassed situations.
 
 For more to visit:
 
-	https://github.com/Weidows/Golang
+	https://github.com/Weidows/wutils
 */
 package utils

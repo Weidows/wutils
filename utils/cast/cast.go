@@ -1,7 +1,7 @@
 package cast
 
 import (
-	"github.com/Weidows/Golang/utils/log"
+	"github.com/Weidows/wutils/utils/log"
 	"github.com/howcrazy/xconv"
 	"strconv"
 )

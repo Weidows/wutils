@@ -1,8 +1,8 @@
 package collection
 
 import (
-	"github.com/Weidows/Golang/utils/cast"
-	"github.com/Weidows/Golang/utils/reflect"
+	"github.com/Weidows/wutils/utils/cast"
+	"github.com/Weidows/wutils/utils/reflect"
 	"github.com/gogo/protobuf/sortkeys"
 	"sort"
 )

@@ -1,8 +1,8 @@
 package time
 
 import (
-	"github.com/Weidows/Golang/utils/cast"
-	"github.com/Weidows/Golang/utils/log"
+	"github.com/Weidows/wutils/utils/cast"
+	"github.com/Weidows/wutils/utils/log"
 	"time"
 )
 

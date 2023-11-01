@@ -1,9 +1,9 @@
 package files
 
 import (
-	"github.com/Weidows/Golang/utils/collection"
-	"github.com/Weidows/Golang/utils/hash"
-	"github.com/Weidows/Golang/utils/log"
+	"github.com/Weidows/wutils/utils/collection"
+	"github.com/Weidows/wutils/utils/hash"
+	"github.com/Weidows/wutils/utils/log"
 	"os"
 	"path/filepath"
 	"strings"
