@@ -39,3 +39,4 @@ jobs:
           overwrite: true
           #          sha256sum: true
           md5sum: true
+          build_flags: -buildvcs=false
