@@ -31,7 +31,7 @@ jobs:
           goarch: ${{ matrix.goarch }}
           goversion: "https://dl.google.com/go/go1.19.1.linux-amd64.tar.gz"
           project_path: ./cmd/common-starter ./cmd/dsg ./cmd/gmm ./cmd/subdir-extracter
-          asset_name: wutils-cli
+          asset_name: wutils-cli-${{ matrix.goos }}-${{ matrix.goarch }}
           #          extra_files: LICENSE README.md
           extra_files: README.md
           #          build_command: make DEST=${BUILD_ARTIFACTS_FOLDER}
