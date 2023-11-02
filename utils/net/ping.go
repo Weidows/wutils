@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os/exec"
 	"runtime"
+	"strings"
 	"time"
 )
 
@@ -17,16 +18,22 @@ Ping returns Milliseconds
 		= 10e3 Milliseconds(ms)
 		= 10e6 Microseconds(μs)
 		= 10e9 Nanoseconds(ns)
+
+`https://baidu.com` or `baidu.com` is OK.
 */
 func Ping(host string) int64 {
+	host = strings.TrimSpace(host)
+	host = strings.TrimPrefix(host, "http://")
+	host = strings.TrimPrefix(host, "https://")
+
 	if runtime.GOOS == "windows" {
-		return pingLib(host)
+		return pingByLib(host)
 	} else {
-		return pingHttp(host)
+		return pingByHttp(host)
 	}
 }
 
-func pingLib(host string) int64 {
+func pingByLib(host string) int64 {
 	p, err := probing.NewPinger(host)
 	if err != nil {
 		logger.Error(err)
@@ -48,7 +55,7 @@ func pingLib(host string) int64 {
 	return ms
 }
 
-func pingHttp(host string) int64 {
+func pingByHttp(host string) int64 {
 	client := http.Client{
 		Timeout: 5 * time.Second,
 	}

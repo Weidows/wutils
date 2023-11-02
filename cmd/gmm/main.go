@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/Weidows/wutils/utils/net"
 	"log"
-	"net/http"
 	"os"
 	"os/exec"
 	"strings"
@@ -51,7 +51,7 @@ func main() {
 					fmt.Println(k)
 					for key, value := range v {
 						wg.Add(1)
-						go ping(k, value, key)
+						go delayTest(k, value, key)
 					}
 					wg.Wait()
 					sortedTimes := collection.SortKeys(timeCost[k])
@@ -112,12 +112,13 @@ func main() {
 	}
 }
 
-func ping(k string, value string, key string) {
+func delayTest(k string, value string, key string) {
 	defer wg.Done()
-	start := time.Now().UnixMilli()
-	time2.WithTimeOut(time.Second*3, func() string {
-		_, _ = http.Get(value)
-		return ""
+	tc := time2.TimeCosts(func() {
+		time2.WithTimeOut(time.Second*3, func() string {
+			net.Ping(value)
+			return ""
+		})
 	})
-	timeCost[k][time.Now().UnixMilli()-start] = key
+	timeCost[k][tc.Milliseconds()] = key
 }
