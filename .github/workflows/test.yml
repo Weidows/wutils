@@ -1,0 +1,11 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  goreadme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Debugging with ssh
+        uses: lhotari/action-upterm@v1
