@@ -1,0 +1,21 @@
+parallel:
+  dsg: true
+  ol: true
+
+dsg:
+  disk:
+    #    - "E:"
+    - "F:"
+  #  delay: 这样不设置会置空, 而不是取 default
+  delay: 30
+
+ol:
+  debug: true
+  interval: 1000
+  patterns:
+    - title: xyplorer
+      opacity: 210
+    - title: "- Microsoft​ Edge$"
+      opacity: 200
+    - title: "- Visual Studio Code"
+      opacity: 180

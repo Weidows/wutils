@@ -124,25 +124,6 @@ D:\DESKTOP\1
 
 <a>![分割线](https://cdn.jsdelivr.net/gh/Weidows/Weidows/image/divider.png)</a>
 
-## dsg
-
-Disk sleep guard, 防止硬盘睡眠 (每隔一段自定义的时间, 往指定盘里写一个时间戳)
-
-外接 HDD 频繁启停甚是头疼, 后台挂着 dsg 让它一直怠速跑着, 免得起起停停增加损坏率
-
-```console
-> .\dsg.exe
-please start with params like: 'dsg.exe E: 30'
-      1. disk
-      2. delay seconds
-
-
-> dsg D:
-10 / 30 [------------------->_______________________________________] 33.33%
-```
-
-<a>![分割线](https://cdn.jsdelivr.net/gh/Weidows/Weidows/image/divider.png)</a>
-
 ## gmm
 
 Golang package Mirror Manager
