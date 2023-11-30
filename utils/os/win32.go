@@ -110,8 +110,7 @@ func SetWindowOpacity(hwnd win32.HWND, opacity byte) bool {
 		logger.Error(err.Error())
 	}
 
-	if _, err = win32.SetWindowLongA(hwnd, win32.GWL_EXSTYLE, grammar.ConditionalEqual(
-		windowLong == 0, windowLong, int32(win32.WS_EX_LAYERED))); err.NilOrError() != nil {
+	if _, err = win32.SetWindowLongPtrA(hwnd, win32.GWL_EXSTYLE, uintptr(windowLong)|uintptr(win32.WS_EX_LAYERED)); err.NilOrError() != nil {
 		logger.Error(err.Error())
 	}
 	if res, err := win32.SetLayeredWindowAttributes(

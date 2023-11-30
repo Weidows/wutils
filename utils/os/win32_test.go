@@ -16,7 +16,11 @@ func TestGetEnumWindowsInfo(t *testing.T) {
 
 func TestSetWindowOpacity(t *testing.T) {
 	collection.ForEach(FindWindows("Visual Studio Code"), func(i int, v *EnumWindowsResult) {
-		logger.Println(SetWindowOpacity(v.Handle, 200))
+		logger.Println(SetWindowOpacity(v.Handle, 200), v)
+	})
+
+	collection.ForEach(FindWindows("xyplorer"), func(i int, v *EnumWindowsResult) {
+		logger.Println(SetWindowOpacity(v.Handle, 200), v)
 	})
 }
 

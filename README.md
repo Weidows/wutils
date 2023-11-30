@@ -59,10 +59,10 @@
   ***
 
   ```shell
-  go install github.com/Weidows/wutils/cmd/common-starter@latest `
-  github.com/Weidows/wutils/cmd/subdir-extracter@latest `
-  github.com/Weidows/wutils/cmd/keep-runner@latest `
-  github.com/Weidows/wutils/cmd/gmm@latest
+  go install github.com/Weidows/wutils/cmd/common-starter@master `
+  github.com/Weidows/wutils/cmd/subdir-extracter@master `
+  github.com/Weidows/wutils/cmd/keep-runner@master `
+  github.com/Weidows/wutils/cmd/gmm@master
   ```
 
   </details>
