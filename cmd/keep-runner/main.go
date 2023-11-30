@@ -53,7 +53,6 @@ var (
 			{
 				Name:    "parallel",
 				Aliases: []string{"pl"},
-				Hidden:  true,
 				Usage:   "并行+后台执行任务(取自config)",
 				Action: func(cCtx *cli.Context) (err error) {
 					if config.Parallel.Dsg {
@@ -87,6 +86,22 @@ var (
 				Action: func(cCtx *cli.Context) (err error) {
 					ol()
 					return err
+				},
+				Subcommands: []*cli.Command{
+					{
+						Name:    "list",
+						Aliases: []string{""},
+						Usage:   "list all visible windows",
+						Action: func(cCtx *cli.Context) (err error) {
+							collection.ForEach(os2.GetEnumWindowsInfo(&os2.EnumWindowsFilter{
+								IgnoreNoTitled:  true,
+								IgnoreInvisible: true,
+							}), func(i int, v *os2.EnumWindowsResult) {
+								logger.Println(fmt.Sprintf("%+v", v))
+							})
+							return err
+						},
+					},
 				},
 			},
 			{
