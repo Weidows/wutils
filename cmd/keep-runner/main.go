@@ -7,7 +7,6 @@ import (
 	"github.com/Weidows/wutils/utils/grammar"
 	"github.com/Weidows/wutils/utils/log"
 	os2 "github.com/Weidows/wutils/utils/os"
-	"github.com/cheggaaa/pb/v3"
 	"github.com/jinzhu/configor"
 	"github.com/urfave/cli/v2"
 	"os"
@@ -19,6 +18,7 @@ const ConfigPath = "keep-runner.yml"
 
 var (
 	logger = log.GetLogger()
+
 	config = struct {
 		Debug    bool `default:"false"`
 		Parallel struct {
@@ -32,7 +32,7 @@ var (
 		} `yaml:"dsg" required:"true"`
 
 		Ol struct {
-			Interval int `default:"1000"`
+			Delay    int `default:"2"`
 			Patterns []struct {
 				Title   string
 				Opacity byte
@@ -56,14 +56,19 @@ var (
 				Hidden:  true,
 				Usage:   "并行+后台执行任务(取自config)",
 				Action: func(cCtx *cli.Context) (err error) {
-					parallel()
+					if config.Parallel.Dsg {
+						go dsg()
+					}
+					if config.Parallel.Ol {
+						ol()
+					}
+
 					return err
 				},
 			},
 			{
 				Name:      "dsg",
 				Aliases:   []string{""},
-				Hidden:    false,
 				UsageText: "",
 				Usage: "Disk sleep guard\n" +
 					"防止硬盘睡眠 (每隔一段自定义的时间, 往指定盘里写一个时间戳)\n" +
@@ -76,7 +81,6 @@ var (
 			{
 				Name:    "ol",
 				Aliases: []string{""},
-				Hidden:  false,
 				Usage: "Opacity Listener\n" +
 					"后台持续运行, 并每隔指定时间扫一次运行的窗口\n" +
 					"把指定窗口设置opacity, 使其透明化(比BLend好使~)",
@@ -88,7 +92,6 @@ var (
 			{
 				Name:    "config",
 				Aliases: []string{""},
-				Hidden:  false,
 				Usage:   "print config file",
 				Action: func(cCtx *cli.Context) (err error) {
 					logger.Println(fmt.Sprintf("%+v", config))
@@ -99,17 +102,8 @@ var (
 	}
 )
 
-func parallel() {
-	if config.Parallel.Dsg {
-		go dsg()
-	}
-	if config.Parallel.Ol {
-		ol()
-	}
-
-}
-
 func dsg() {
+	logger.Infoln(config.Dsg)
 	writeString := func(disk string) {
 		f := strings.Join([]string{disk, ".dsg"}, "/")
 
@@ -120,30 +114,20 @@ func dsg() {
 		_, _ = file.WriteString("dsg running at " + time.Now().String() + "\n")
 		_ = file.Close()
 	}
-	count := config.Dsg.Delay
-	bar := pb.Simple.Start(count)
 
 	for true {
-		for i := 0; i < count; i++ {
-			bar.Increment()
-			time.Sleep(time.Second)
-		}
+		time.Sleep(time.Second * time.Duration(config.Dsg.Delay))
+
 		collection.ForEach(config.Dsg.Disk, func(i int, v string) {
 			go writeString(v)
 		})
-		bar.SetCurrent(0)
 	}
 }
 
 func ol() {
-	count := config.Ol.Interval / 1000
-	bar := pb.Simple.Start(count)
-
+	logger.Infoln(config.Ol)
 	for true {
-		for i := 0; i < count; i++ {
-			bar.Increment()
-			time.Sleep(time.Second)
-		}
+		time.Sleep(time.Second * time.Duration(config.Ol.Delay))
 
 		collection.ForEach(os2.GetEnumWindowsInfo(&os2.EnumWindowsFilter{
 			IgnoreNoTitled:  true,
@@ -161,8 +145,6 @@ func ol() {
 				}
 			})
 		})
-
-		bar.SetCurrent(0)
 	}
 }
 

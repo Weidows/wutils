@@ -1,17 +1,17 @@
+debug: false
 parallel:
   dsg: true
   ol: true
 
 dsg:
   disk:
-    #    - "E:"
-    - "F:"
+    - "D:"
+    - "E:"
   #  delay: 这样不设置会置空, 而不是取 default
   delay: 30
 
 ol:
-  debug: true
-  interval: 1000
+  delay: 2
   patterns:
     - title: xyplorer
       opacity: 210
