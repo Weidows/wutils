@@ -23,7 +23,7 @@ var (
 //		time.Sleep(time.Second)
 //		return "2"
 //	}) // nil
-func WithTimeOut[T any](timeOut time.Duration, fn func() T) T {
+func WithTimeOut[T any](timeout time.Duration, fn func() T) T {
 	done := make(chan T, 1)
 
 	go func() {
@@ -36,7 +36,7 @@ func WithTimeOut[T any](timeOut time.Duration, fn func() T) T {
 	select {
 	case d := <-done:
 		return d
-	case <-time.After(timeOut):
+	case <-time.After(timeout):
 		//fmt.Println("timeout!!!")
 		return cast.EmptyT[T]()
 	}
