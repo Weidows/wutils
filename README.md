@@ -124,6 +124,36 @@ D:\DESKTOP\1
 
 <a>![分割线](https://cdn.jsdelivr.net/gh/Weidows/Weidows/image/divider.png)</a>
 
+## keep-runner
+
+```console
+└ $ .\keep-runner.exe         
+NAME:
+   keep-runner - 几个旨在后台运行的程序, config 使用: ./keep-runner.yml
+                 Default config: https://github.com/Weidows/wutils/tree/master/config/cmd/keep-runner.yml
+
+USAGE:
+   keep-runner [global options] command [command options] [arguments...]
+
+AUTHOR:
+   Weidows <utsuko27@gmail.com>
+
+COMMANDS:
+   dsg,      Disk sleep guard
+             防止硬盘睡眠 (每隔一段自定义的时间, 往指定盘里写一个时间戳)
+             外接 HDD 频繁启停甚是头疼, 后台让它怠速跑着, 免得起起停停增加损坏率
+   ol,       Opacity Listener
+             后台持续运行, 并每隔指定时间扫一次运行的窗口
+             把指定窗口设置opacity, 使其透明化(比BLend好使~)
+   config,   print config file
+   help, h   Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --help, -h  show help (default: false)
+```
+
+<a>![分割线](https://cdn.jsdelivr.net/gh/Weidows/Weidows/image/divider.png)</a>
+
 ## gmm
 
 Golang package Mirror Manager
