@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/Weidows/wutils/utils/collection"
-	"github.com/Weidows/wutils/utils/files"
 	"github.com/Weidows/wutils/utils/grammar"
 	"github.com/Weidows/wutils/utils/log"
 	os2 "github.com/Weidows/wutils/utils/os"
@@ -20,7 +19,10 @@ var (
 	logger = log.GetLogger()
 
 	config = struct {
-		Debug    bool `default:"false"`
+		Debug   bool `default:"false"`
+		Refresh struct {
+			Delay int `default:"10"`
+		}
 		Parallel struct {
 			Dsg bool
 			Ol  bool
@@ -131,19 +133,16 @@ func dsg() {
 	}
 
 	for true {
-		time.Sleep(time.Second * time.Duration(config.Dsg.Delay))
-
 		collection.ForEach(config.Dsg.Disk, func(i int, v string) {
 			go writeString(v)
 		})
+		time.Sleep(time.Second * time.Duration(config.Dsg.Delay))
 	}
 }
 
 func ol() {
 	logger.Infoln(config.Ol)
 	for true {
-		time.Sleep(time.Second * time.Duration(config.Ol.Delay))
-
 		collection.ForEach(os2.GetEnumWindowsInfo(&os2.EnumWindowsFilter{
 			IgnoreNoTitled:  true,
 			IgnoreInvisible: true,
@@ -152,7 +151,7 @@ func ol() {
 				Title   string
 				Opacity byte
 			}) {
-				if grammar.Match(pattern.Title, window.Title) {
+				if grammar.Match(pattern.Title, window.Title) && pattern.Opacity != window.Opacity {
 					isSuccess := os2.SetWindowOpacity(window.Handle, pattern.Opacity)
 					if config.Debug {
 						logger.Println(isSuccess, window, pattern)
@@ -160,14 +159,20 @@ func ol() {
 				}
 			})
 		})
+		time.Sleep(time.Second * time.Duration(config.Ol.Delay))
+	}
+}
+
+func refreshConfig() {
+	for {
+		_ = configor.Load(&config, ConfigPath)
+		time.Sleep(time.Second * time.Duration(config.Refresh.Delay))
 	}
 }
 
 func main() {
-	if !files.IsExist(ConfigPath) {
-		return
-	}
-	_ = configor.Load(&config, ConfigPath)
+	go refreshConfig()
+	time.Sleep(500)
 
 	if err := app.Run(os.Args); err != nil {
 		logger.Fatal(err.Error())

@@ -126,6 +126,8 @@ D:\DESKTOP\1
 
 ## keep-runner
 
+- [x] 运行时配置热更新
+
 ```console
 └ $ .\keep-runner.exe         
 NAME:
