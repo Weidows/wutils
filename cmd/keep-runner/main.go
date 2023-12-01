@@ -142,16 +142,19 @@ func dsg() {
 
 func ol() {
 	logger.Infoln(config.Ol)
+
 	for true {
-		collection.ForEach(os2.GetEnumWindowsInfo(&os2.EnumWindowsFilter{
+		windows := os2.GetEnumWindowsInfo(&os2.EnumWindowsFilter{
 			IgnoreNoTitled:  true,
 			IgnoreInvisible: true,
-		}), func(i int, window *os2.EnumWindowsResult) {
+		})
+		collection.ForEach(windows, func(i int, window *os2.EnumWindowsResult) {
 			collection.ForEach(config.Ol.Patterns, func(ii int, pattern struct {
 				Title   string
 				Opacity byte
 			}) {
 				if grammar.Match(pattern.Title, window.Title) && pattern.Opacity != window.Opacity {
+					//logger.Println(window, pattern)
 					isSuccess := os2.SetWindowOpacity(window.Handle, pattern.Opacity)
 					if config.Debug {
 						logger.Println(isSuccess, window, pattern)

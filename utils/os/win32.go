@@ -29,6 +29,7 @@ type EnumWindowsResult struct {
 }
 
 func GetEnumWindowsInfo(filter *EnumWindowsFilter) []*EnumWindowsResult {
+	_enumWindowsResult = nil
 	enumWindowsFilter = filter
 	EnumWindows(EnumWindowsProc)
 	return _enumWindowsResult
