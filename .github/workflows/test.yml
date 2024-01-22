@@ -1,11 +1,61 @@
+# name: action
+
 on:
   workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - "**/*.go"
+      - ".github/workflows/ci.yml"
+#  pull_request:
+#    branches: [main]
+#    paths:
+#      - "**/*.go"
+#      - ".github/workflows/ci.yml"
+permissions:
+  # Goreadme needs permissions to update pull requests comments and change contents.
+  pull-requests: write
+  contents: write
 
 jobs:
-  Debugging-with-ssh:
-    runs-on: ubuntu-latest
+  go-test:
+    runs-on: windows-latest
     steps:
-      - name: Check out repository
+      - name: Git Checkout Go Module
         uses: actions/checkout@v2
-      - name: Debugging with ssh
-        uses: lhotari/action-upterm@v1
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+      - name: Set up go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.19
+      # - name: Dependencies
+      #   run: go get -v -t -d ./...
+      - name: Go test
+        env:
+          GOOS: windows
+        run: go test ./...
+#  goreadme:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Check out repository
+#        uses: actions/checkout@v2
+#      #   with:
+#      #     set-safe-directory: '*'
+#      # - name: Debugging with ssh
+#      #   uses: lhotari/action-upterm@v1
+#
+#      - name: My-Tasks
+#        run: |
+#          git config --global --add safe.directory /github/workspace
+#
+#      # https://github.com/posener/goreadme
+#      - name: Update readme according to Go doc
+#        uses: posener/goreadme@v1
+#        with:
+#          badge-travisci: 'true'
+#          badge-codecov: 'true'
+#          badge-godoc: 'true'
+#          badge-goreportcard: 'true'
+#          # Optional: Token allows goreadme to comment the PR with diff preview.
+#          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
