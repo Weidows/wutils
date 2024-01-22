@@ -24,3 +24,7 @@ func TestGetSubFilesWithFilter(t *testing.T) {
 		fmt.Println(filepath.Join(v.Path, v.Name))
 	}
 }
+
+func TestIsExist(t *testing.T) {
+	fmt.Println(IsExist("./2e3ce48952af857ccbecb2e8f7ff52c6.mp4"))
+}

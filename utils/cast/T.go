@@ -27,7 +27,7 @@ func EmptyT[T SupportedEmptyType]() (t T) {
 	case reflect.String:
 		res = ""
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Float32, reflect.Float64:
-		res = 0
+		res = reflect.Zero(reflect.TypeOf(t)).Interface()
 	case reflect.Bool:
 		res = false
 	case reflect.Slice, reflect.Array:

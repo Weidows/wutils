@@ -109,9 +109,16 @@ func IsDir(path string) bool {
 	return fileInfo.IsDir()
 }
 
+// IsExist 检查文件是否存在
 func IsExist(path string) bool {
 	_, err := os.Stat(path)
-	return err == nil
+	if err == nil {
+		return true // 文件存在
+	}
+	if os.IsNotExist(err) {
+		return false // 文件不存在
+	}
+	return false // 其他错误
 }
 
 func Move(oldPath, newPath string, mode int) {
