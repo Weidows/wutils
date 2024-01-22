@@ -5,6 +5,6 @@ import (
 )
 
 func TestPing(t *testing.T) {
-	p := Ping("github.com")
-	logger.Println(p)
+	logger.Println(Ping("baidu.com"))
+	logger.Println(Ping("github.com"))
 }

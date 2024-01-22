@@ -10,7 +10,7 @@ var (
 	logger = log.GetLogger()
 )
 
-// WithTimeOut 超时退出返回 nil
+// WithTimeOut 超时退出返回 nil, 注意 func 返回值不能是 any
 //
 // From: https://geektutu.com/post/hpg-timeout-goroutine.html
 //
