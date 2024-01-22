@@ -16,9 +16,9 @@ jobs:
         # build and publish in parallel: linux/386, linux/amd64, linux/arm64, windows/386, windows/amd64, darwin/amd64, darwin/arm64
         goos: [ linux, windows, darwin ]
         goarch: [ amd64, arm64 ]
-        exclude:
-          - goarch: arm64
-            goos: windows
+        # exclude:
+        #   - goarch: arm64
+        #     goos: windows
     steps:
       - uses: actions/checkout@v3
       #      - uses: wangyoucao577/go-release-action@v1
@@ -28,7 +28,7 @@ jobs:
           goos: windows
           goarch: ${{ matrix.goarch }}
           goversion: "https://dl.google.com/go/go1.19.1.linux-amd64.tar.gz"
-          project_path: ./cmd/common-starter ./cmd/gmm ./cmd/subdir-extracter
+          project_path: ./cmd/common-starter ./cmd/gmm ./cmd/keep-runner ./cmd/subdir-extracter
           asset_name: wutils-cli-${{ matrix.goos }}-${{ matrix.goarch }}
           #          extra_files: LICENSE README.md
           extra_files: README.md

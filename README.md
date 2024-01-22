@@ -3,8 +3,8 @@
  * @Author: Weidows
  * @LastEditors: Weidows
  * @Date: 2022-08-30 14:51:11
- * @LastEditTime: 2023-11-06 03:50:43
- * @FilePath: \wutils\README.md
+ * @LastEditTime: 2023-12-08 11:19:07
+ * @FilePath: \Blog-privated:\Repos\Weidows\wutils\README.md
  * @Description:
  * @:
  * @?: *********************************************************************
@@ -129,7 +129,7 @@ D:\DESKTOP\1
 - [x] 运行时配置热更新
 
 ```console
-└ $ .\keep-runner.exe         
+└ $ .\keep-runner.exe
 NAME:
    keep-runner - 几个旨在后台运行的程序, config 使用: ./keep-runner.yml
                  Default config: https://github.com/Weidows/wutils/tree/master/config/cmd/keep-runner.yml
@@ -153,6 +153,8 @@ COMMANDS:
 GLOBAL OPTIONS:
    --help, -h  show help (default: false)
 ```
+
+![1702005541764](image/README/1702005541764.jpg)
 
 <a>![分割线](https://cdn.jsdelivr.net/gh/Weidows/Weidows/image/divider.png)</a>
 
