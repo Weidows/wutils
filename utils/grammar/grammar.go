@@ -1,8 +1,9 @@
 package grammar
 
 import (
-	"github.com/Weidows/wutils/utils/log"
 	"regexp"
+
+	"github.com/Weidows/wutils/utils/log"
 )
 
 var (
@@ -12,9 +13,8 @@ var (
 func ConditionalEqual[T any](condition bool, value1, value2 T) T {
 	if condition {
 		return value1
-	} else {
-		return value2
 	}
+	return value2
 }
 
 func Match(regex, text string) bool {
