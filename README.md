@@ -3,8 +3,8 @@
  * @Author: Weidows
  * @LastEditors: Weidows
  * @Date: 2022-08-30 14:51:11
- * @LastEditTime: 2023-12-08 11:19:07
- * @FilePath: \Blog-privated:\Repos\Weidows\wutils\README.md
+ * @LastEditTime: 2024-01-28 22:04:43
+ * @FilePath: \wutils\README.md
  * @Description:
  * @:
  * @?: *********************************************************************
@@ -135,23 +135,24 @@ NAME:
                  Default config: https://github.com/Weidows/wutils/tree/master/config/cmd/keep-runner.yml
 
 USAGE:
-   keep-runner [global options] command [command options] [arguments...]
+   keep-runner [global options] command [command options]
 
 AUTHOR:
    Weidows <utsuko27@gmail.com>
 
 COMMANDS:
-   dsg,      Disk sleep guard
-             防止硬盘睡眠 (每隔一段自定义的时间, 往指定盘里写一个时间戳)
-             外接 HDD 频繁启停甚是头疼, 后台让它怠速跑着, 免得起起停停增加损坏率
-   ol,       Opacity Listener
-             后台持续运行, 并每隔指定时间扫一次运行的窗口
-             把指定窗口设置opacity, 使其透明化(比BLend好使~)
-   config,   print config file
-   help, h   Shows a list of commands or help for one command
+   parallel, pl  并行+后台执行任务(取自config)
+   dsg           Disk sleep guard
+                 防止硬盘睡眠 (每隔一段自定义的时间, 往指定盘里写一个时间戳)
+                 外接 HDD 频繁启停甚是头疼, 后台让它怠速跑着, 免得起起停停增加损坏率
+   ol            Opacity Listener
+                 后台持续运行, 并每隔指定时间扫一次运行的窗口
+                 把指定窗口设置opacity, 使其透明化(比BLend好使~)
+   config        print config file
+   help, h       Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --help, -h  show help (default: false)
+   --help, -h  show help
 ```
 
 ![1702005541764](image/README/1702005541764.jpg)

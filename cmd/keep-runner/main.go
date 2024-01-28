@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"strings"
+	"time"
+
 	"github.com/Weidows/wutils/utils/collection"
 	"github.com/Weidows/wutils/utils/grammar"
 	"github.com/Weidows/wutils/utils/log"
 	os2 "github.com/Weidows/wutils/utils/os"
 	"github.com/jinzhu/configor"
 	"github.com/urfave/cli/v2"
-	"os"
-	"strings"
-	"time"
 )
 
 const ConfigPath = "keep-runner.yml"
@@ -69,7 +70,6 @@ var (
 			},
 			{
 				Name:      "dsg",
-				Aliases:   []string{""},
 				UsageText: "",
 				Usage: "Disk sleep guard\n" +
 					"防止硬盘睡眠 (每隔一段自定义的时间, 往指定盘里写一个时间戳)\n" +
@@ -80,8 +80,7 @@ var (
 				},
 			},
 			{
-				Name:    "ol",
-				Aliases: []string{""},
+				Name: "ol",
 				Usage: "Opacity Listener\n" +
 					"后台持续运行, 并每隔指定时间扫一次运行的窗口\n" +
 					"把指定窗口设置opacity, 使其透明化(比BLend好使~)",
@@ -91,9 +90,8 @@ var (
 				},
 				Subcommands: []*cli.Command{
 					{
-						Name:    "list",
-						Aliases: []string{""},
-						Usage:   "list all visible windows",
+						Name:  "list",
+						Usage: "list all visible windows",
 						Action: func(cCtx *cli.Context) (err error) {
 							olList()
 							return err
@@ -102,9 +100,8 @@ var (
 				},
 			},
 			{
-				Name:    "config",
-				Aliases: []string{""},
-				Usage:   "print config file",
+				Name:  "config",
+				Usage: "print config file",
 				Action: func(cCtx *cli.Context) (err error) {
 					logger.Println(fmt.Sprintf("%+v", config))
 					return err

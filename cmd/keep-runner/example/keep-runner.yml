@@ -1,0 +1,6 @@
+ol:
+  delay: 2
+  patterns:
+    - title: "- WPS Office$"
+      # 透明度 (0~255), 255 是完全不透明
+      opacity: 200
