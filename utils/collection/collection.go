@@ -24,9 +24,6 @@ func Map2Slice[K MapKeys, V any](m map[K]V) (keys []K, values []V) {
 	return keys, values
 }
 
-// KeySelector 是一个函数类型，用于选择切片元素作为映射的键
-type KeySelector[K comparable, V any] func(V) K
-
 /*
 // 示例1：将整数切片转换为映射，键为整数值
 intSlice := []int{1, 2, 3, 4}
@@ -65,7 +62,7 @@ fmt.Println(strMap)
 
 fmt.Println(personMap)
 */
-func Slice2Map[K comparable, V any](slice []V, keySelector KeySelector[K, V]) map[K]V {
+func Slice2Map[K comparable, V any](slice []V, keySelector func(V) K) map[K]V {
 	result := make(map[K]V)
 	for _, item := range slice {
 		key := keySelector(item)

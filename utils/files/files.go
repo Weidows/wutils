@@ -1,12 +1,13 @@
 package files
 
 import (
-	"github.com/Weidows/wutils/utils/collection"
-	"github.com/Weidows/wutils/utils/hash"
-	"github.com/Weidows/wutils/utils/log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/Weidows/wutils/utils/collection"
+	"github.com/Weidows/wutils/utils/hash"
+	"github.com/Weidows/wutils/utils/log"
 )
 
 var (
@@ -83,9 +84,10 @@ func getAllSubFiles(path, file string) (res []*subFileInfo) {
 	return res
 }
 
-func WithOpen() {
+// TODO
+// func WithOpen() {
 
-}
+// }
 
 func MergeDirs(mergePath, distPath string) {
 	mergePath = filepath.Clean(mergePath)
