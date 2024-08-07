@@ -1,0 +1,4 @@
+] [share1
+] [share2
+] [onlyA1
+] [onlyA2

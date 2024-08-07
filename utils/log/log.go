@@ -1,8 +1,9 @@
 package log
 
 import (
-	"github.com/sirupsen/logrus"
 	"os"
+
+	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -18,7 +19,7 @@ var (
 			DataKey:           "",
 			FieldMap:          nil,
 			CallerPrettyfier:  nil,
-			PrettyPrint:       true,
+			PrettyPrint:       false,
 		},
 		Hooks: make(logrus.LevelHooks),
 		// 设置日志级别为warn以上

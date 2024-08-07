@@ -1,10 +1,11 @@
 package collection
 
 import (
+	"sort"
+
 	"github.com/Weidows/wutils/utils/cast"
 	"github.com/Weidows/wutils/utils/reflect"
 	"github.com/gogo/protobuf/sortkeys"
-	"sort"
 )
 
 // SortKeys
@@ -15,7 +16,7 @@ func SortKeys[K MapKeys, V any, T interface{ []K }](m map[K]V) T {
 		return nil
 	}
 
-	keys, _ := MapToSlice(m)
+	keys, _ := Map2Slice(m)
 	sorted := SortSlice(keys)
 	//res := make([]K, len(keys))
 	//for i, v := range sorted.([]K) {
