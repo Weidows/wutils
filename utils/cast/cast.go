@@ -1,9 +1,11 @@
 package cast
 
 import (
+	"fmt"
+	"strconv"
+
 	"github.com/Weidows/wutils/utils/log"
 	"github.com/howcrazy/xconv"
-	"strconv"
 )
 
 var (
@@ -11,7 +13,15 @@ var (
 )
 
 func Convert[T any](src any) (res T) {
-	xconv.Convert(src, &res)
+	switch src.(type) {
+	case int32, int64:
+		xconv.Convert(fmt.Sprintf("%v", strconv.FormatInt(src.(int64), 10)), &res)
+		break
+
+	default:
+		xconv.Convert(src, &res)
+	}
+
 	return res
 }
 
