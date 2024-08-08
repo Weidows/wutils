@@ -55,6 +55,9 @@ func NewKeepRunner(logger *logrus.Logger) *Scope {
 func (s *Scope) init() {
 	for {
 		_ = configor.Load(&s.Config, ConfigPath)
+		if s.Config.Refresh.Delay < 1 {
+			s.Config.Refresh.Delay = 1
+		}
 		time.Sleep(time.Second * time.Duration(s.Config.Refresh.Delay))
 	}
 }

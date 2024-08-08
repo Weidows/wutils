@@ -19,7 +19,7 @@ var (
 			DataKey:           "",
 			FieldMap:          nil,
 			CallerPrettyfier:  nil,
-			PrettyPrint:       false,
+			PrettyPrint:       true,
 		},
 		Hooks: make(logrus.LevelHooks),
 		// 设置日志级别为warn以上

@@ -5,9 +5,8 @@ parallel:
 
 dsg:
   disk:
-    #    - "E:"
+    - "E:"
     - "D:"
-  #  delay: 这样不设置会置空, 而不是取 default
   delay: 30
 
 ol:
