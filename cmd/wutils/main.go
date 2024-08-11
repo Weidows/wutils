@@ -15,14 +15,14 @@ var (
 	kr     = keep_runner.NewKeepRunner(logger)
 
 	app = &cli.App{
-		Name: "keep-runner",
+		Name: "wutils",
 		Authors: []*cli.Author{{
 			Name:  "Weidows",
 			Email: "ceo@weidows.tech",
 		}},
 		EnableBashCompletion: true,
-		Usage: "几个旨在后台运行的程序, config 使用: ./keep-runner.yml\n" +
-			"Default config: https://github.com/Weidows/wutils/tree/master/config/cmd/keep-runner.yml",
+		Usage: "Documents(使用指南) at here:\n" +
+			"https://blog.weidows.tech/post/lang/golang/wutils",
 		Commands: []*cli.Command{
 			{
 				Name:  "config",
@@ -36,16 +36,18 @@ var (
 			{
 				Name: "diff",
 				Usage: "diff - Differential set between two files\n" +
-					"文件对比工具, 但不是 Git-diff 那种, 是用来求 '行-差集' 的工具",
+					"文件对比工具, 但不是 Git-diff 那种\n" +
+					"是用来求 '行-差集' 的工具\n" +
+					"输入为两个特定名称的文件: './inputA.txt', './inputB.txt'",
 				Action: func(cCtx *cli.Context) (err error) {
 					missInA, missInB := diff.CheckLinesDiff("./inputA.txt", "./inputB.txt")
 					// 输出结果
-					fmt.Println("Missing in A")
+					fmt.Println("================== Missing in A ==================")
 					for _, file := range missInA {
 						fmt.Println(file)
 					}
 
-					fmt.Println("\nMissing in B")
+					fmt.Println("\n================== Missing in B:==================")
 					for _, file := range missInB {
 						fmt.Println(file)
 					}
@@ -57,7 +59,7 @@ var (
 			{
 				Name:    "parallel",
 				Aliases: []string{"pl"},
-				Usage:   "并行+后台执行任务(取自config)",
+				Usage:   "并行+后台执行任务 (配置取自wutils.yml)",
 				Action: func(cCtx *cli.Context) (err error) {
 					if kr.Config.Parallel.Dsg {
 						go kr.Dsg()
@@ -84,7 +86,7 @@ var (
 				Name: "ol",
 				Usage: "Opacity Listener\n" +
 					"后台持续运行, 并每隔指定时间扫一次运行的窗口\n" +
-					"把指定窗口设置opacity, 使其透明化(比BLend好使~)",
+					"把指定窗口设置opacity, 使其透明化 (same as BLend)",
 				Action: func(cCtx *cli.Context) (err error) {
 					kr.Ol()
 					return err

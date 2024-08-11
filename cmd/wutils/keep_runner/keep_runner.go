@@ -13,7 +13,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const ConfigPath = "keep-runner.yml"
+const ConfigPath = "./Config/cmd/wutils.yml"
 
 // Scope 定义了配置和日志记录器的结构体
 type Scope struct {
@@ -116,6 +116,7 @@ func (s *Scope) OlList() {
 		IgnoreNoTitled:  true,
 		IgnoreInvisible: true,
 	}), func(i int, v *os2.EnumWindowsResult) {
-		s.Logger.Println(fmt.Sprintf("%+v", v))
+		// s.Logger.Println(fmt.Sprintf("%+v", v))
+		fmt.Println(fmt.Sprintf("%+v", v))
 	})
 }
