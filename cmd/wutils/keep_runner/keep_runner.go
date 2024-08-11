@@ -13,7 +13,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const ConfigPath = "./Config/cmd/wutils.yml"
+const ConfigPath = "./config/cmd/wutils.yml"
 
 // Scope 定义了配置和日志记录器的结构体
 type Scope struct {

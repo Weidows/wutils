@@ -1,5 +1,9 @@
+@REM Watch out! Chinese word will cause error in this file
+
 @echo off
-chcp 65001
-tasklist | find /i "wutils" || powershell Start-Process -WindowStyle hidden ../wutils ol
-echo 启动成功
+cd ..\..\
+
+tasklist | find /i "wutils" || powershell Start-Process -WindowStyle hidden ./wutils ol
+
+echo Start Successfully
 pause
