@@ -1,7 +1,6 @@
 package zip
 
 import (
-	"bytes"
 	"io"
 	"path/filepath"
 	"strings"
@@ -61,19 +60,10 @@ func (a *Archive) TryUnzip() bool {
 
 func unzip(zipped io.ReadCloser, fileName string) bool {
 	defer zipped.Close()
-	buffer := new(bytes.Buffer)
-
-	// extracted, err := os.Create(fileName)
-	// if err != nil {
-	// 	return false
-	// }
-	// defer extracted.Close()
-
-	// // 无论是否解压成功, 都要删除解压文件
-	// defer os.Remove(fileName)
-
-	n, err := io.Copy(buffer, zipped)
-	if err != nil || n == 0 {
+	// 使用流式处理，避免将整个文件内容加载到内存中
+	buffer := make([]byte, 1024) // 使用较小的缓冲区
+	n, err := zipped.Read(buffer)
+	if (err != nil && err != io.EOF) || n == 0 {
 		return false
 	}
 

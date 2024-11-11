@@ -32,6 +32,8 @@ func CrackPassword(archivePath string) string {
 			defer wg.Done()
 			if zip.NewArchive(archivePath, p).TryUnzip() {
 				success <- p
+			} else {
+				fmt.Printf("failed to unzip with password: %s\n", p)
 			}
 		}(password)
 	}

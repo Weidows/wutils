@@ -104,11 +104,8 @@ var (
 				},
 			},
 			{
-				Name: "zip",
-				// Usage: "",
-				// Action: func(cCtx *cli.Context) (err error) {
-				// 	return err
-				// },
+				Name:  "zip",
+				Usage: "some actions to operate zip/7z files",
 				Subcommands: []*cli.Command{
 					{
 						Name:  "crack",
