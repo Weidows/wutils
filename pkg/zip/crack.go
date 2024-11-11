@@ -15,6 +15,10 @@ type Archive struct {
 	password    string
 }
 
+func NewArchive(archivePath, password string) *Archive {
+	return &Archive{archivePath: archivePath, password: password}
+}
+
 // Attempt to unlock the archive with the given password
 func (a *Archive) TryUnzip() bool {
 	switch strings.ToLower(filepath.Ext(a.archivePath)) {

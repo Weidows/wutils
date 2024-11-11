@@ -6,6 +6,7 @@ import (
 
 	"github.com/Weidows/wutils/cmd/wutils/diff"
 	"github.com/Weidows/wutils/cmd/wutils/keep_runner"
+	"github.com/Weidows/wutils/cmd/wutils/zip"
 	"github.com/Weidows/wutils/utils/log"
 	"github.com/urfave/cli/v2"
 )
@@ -98,6 +99,33 @@ var (
 						Action: func(cCtx *cli.Context) (err error) {
 							kr.OlList()
 							return err
+						},
+					},
+				},
+			},
+			{
+				Name: "zip",
+				// Usage: "",
+				// Action: func(cCtx *cli.Context) (err error) {
+				// 	return err
+				// },
+				Subcommands: []*cli.Command{
+					{
+						Name:  "crack",
+						Usage: "zip crack <path> - Crack the password of zip/7z files",
+						Action: func(cCtx *cli.Context) error {
+							if cCtx.Args().Len() < 1 {
+								return fmt.Errorf("please provide the path to the archive file")
+							}
+							archivePath := cCtx.Args().Get(0)
+							password := zip.CrackPassword(archivePath)
+
+							if password == "" {
+								return fmt.Errorf("no password found")
+							} else {
+								fmt.Printf("Password found: %s\n", password)
+							}
+							return nil
 						},
 					},
 				},
