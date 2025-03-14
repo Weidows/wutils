@@ -6,6 +6,7 @@ import (
 
 	"github.com/Weidows/wutils/cmd/wutils/diff"
 	"github.com/Weidows/wutils/cmd/wutils/keep_runner"
+	"github.com/Weidows/wutils/cmd/wutils/media"
 	"github.com/Weidows/wutils/cmd/wutils/zip"
 	"github.com/Weidows/wutils/utils/log"
 	"github.com/urfave/cli/v2"
@@ -122,6 +123,26 @@ var (
 							} else {
 								fmt.Printf("Password found: %s\n", password)
 							}
+							return nil
+						},
+					},
+				},
+			},
+
+			{
+				Name:  "media",
+				Usage: "some actions to operate image or video files",
+				Subcommands: []*cli.Command{
+					{
+						Name:  "group",
+						Usage: "根据地理位置和时间对媒体文件进行分组",
+						Action: func(c *cli.Context) error {
+							inputDir := c.Args().Get(0)
+							if inputDir == "" {
+								return fmt.Errorf("请提供输入路径")
+							}
+							media.ClusterAndCopy(inputDir)
+
 							return nil
 						},
 					},

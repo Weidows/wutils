@@ -10,6 +10,7 @@ require (
 	github.com/magiconair/properties v1.8.7
 	github.com/morrisxyang/errors v0.0.0-20230323132346-5e87c521fb94
 	github.com/prometheus-community/pro-bing v0.3.0
+	github.com/rwcarlsen/goexif v0.0.0-20190401172101-9e8deecbddbd
 	github.com/sirupsen/logrus v1.9.3
 	github.com/urfave/cli/v2 v2.27.1
 	github.com/zzl/go-win32api/v2 v2.1.0
