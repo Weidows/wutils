@@ -28,3 +28,39 @@ func TestGetSubFilesWithFilter(t *testing.T) {
 func TestIsExist(t *testing.T) {
 	fmt.Println(IsExist("./2e3ce48952af857ccbecb2e8f7ff52c6.mp4"))
 }
+
+func TestCopyFile(t *testing.T) {
+	type args struct {
+		src string
+		dst string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			"right",
+			args{
+				"2e3ce48952af857ccbecb2e8f7ff52c6.mp4",
+				"2e3ce48952af857ccbecb2e8f7ff52c6_cp.mp4",
+			},
+			false,
+		},
+		{
+			"wrong",
+			args{
+				"2e3ce48952af857ccbecb2e8f7ff52c6_.mp4",
+				"2e3ce48952af857ccbecb2e8f7ff52c6_cp.mp4",
+			},
+			true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := CopyFile(tt.args.src, tt.args.dst); (err != nil) != tt.wantErr {
+				t.Errorf("CopyFile() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

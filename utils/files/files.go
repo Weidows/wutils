@@ -1,6 +1,7 @@
 package files
 
 import (
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -162,4 +163,45 @@ func HardMove(oldPath, newPath string) {
 	if err != nil {
 		return
 	}
+}
+
+/*
+CopyFile Copy file with timestamp
+
+复制文件, 同时恢复时间戳
+*/
+func CopyFile(src, dst string) error {
+	// 打开源文件
+	sourceFile, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer sourceFile.Close()
+
+	// 获取源文件的信息，包括时间戳
+	sourceInfo, err := os.Stat(src)
+	if err != nil {
+		return err
+	}
+
+	// 创建目标文件
+	destFile, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer destFile.Close()
+
+	// 复制文件内容
+	_, err = io.Copy(destFile, sourceFile)
+	if err != nil {
+		return err
+	}
+
+	// 恢复时间戳
+	err = os.Chtimes(dst, sourceInfo.ModTime(), sourceInfo.ModTime())
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

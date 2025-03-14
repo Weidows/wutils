@@ -2,7 +2,6 @@ package media
 
 import (
 	"fmt"
-	"io"
 	"log"
 	"math"
 	"os"
@@ -11,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Weidows/wutils/utils/files"
 	"github.com/rwcarlsen/goexif/exif"
 )
 
@@ -270,33 +270,11 @@ func copyFilesToClusters(clusters []Cluster, outputDir string) error {
 			destPath := filepath.Join(clusterDir, fileName)
 
 			// 复制文件
-			err := copyFile(filePath, destPath)
+			err := files.CopyFile(filePath, destPath)
 			if err != nil {
 				return err
 			}
 		}
-	}
-
-	return nil
-}
-
-// copyFile 复制文件
-func copyFile(src, dst string) error {
-	sourceFile, err := os.Open(src)
-	if err != nil {
-		return err
-	}
-	defer sourceFile.Close()
-
-	destFile, err := os.Create(dst)
-	if err != nil {
-		return err
-	}
-	defer destFile.Close()
-
-	_, err = io.Copy(destFile, sourceFile)
-	if err != nil {
-		return err
 	}
 
 	return nil
