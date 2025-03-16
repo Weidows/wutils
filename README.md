@@ -22,8 +22,8 @@ cover: https://pan.weidows.tech/d/local/blog/1d36e9d50555af6fca23e5fd36246cf5490
  * @Author: Weidows
  * @LastEditors: Weidows
  * @Date: 2022-08-30 14:51:11
- * @LastEditTime: 2024-11-11 23:56:09
- * @FilePath: \Blog-private\source\_posts\lang\golang\wutils\README.md
+ * @LastEditTime: 2025-03-17 01:25:22
+ * @FilePath: \wutils\README.md
  * @Description:
  * @:
  * ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡏⠻⣄
@@ -70,6 +70,7 @@ cover: https://pan.weidows.tech/d/local/blog/1d36e9d50555af6fca23e5fd36246cf5490
       - [diff](#diff)
       - [zip](#zip)
         - [crack](#crack)
+      - [media](#media)
     - [common-starter](#common-starter)
     - [subdir-extracter](#subdir-extracter)
       - [usage](#usage)
@@ -278,6 +279,20 @@ onlyA2
   - .7z
   - .zip
   - 分卷文件 (.zip, .z01, .z02 ....)
+
+---
+
+#### media
+
+场景: 手机拍出来的图片/视频会同一堆在 `DCIM/Camera` 里, 有点太多了难以分组
+
+此程序作用为归类图片/视频, 默认参数对 `12h时间内` & `方圆1km` 归为一组, 减少手动分组的麻烦
+
+只接收一个参数, 图片文件夹的路径, 会在其内部生成 `output`, 并把分组后的文件复制进去 (注意大小)
+
+```
+wutils media group F:/Pictures/@Collections/DCIM/Camera
+```
 
 <a>![分割线](https://pan.weidows.tech/d/local/img/divider.png)</a>
 
