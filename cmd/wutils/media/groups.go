@@ -14,6 +14,17 @@ import (
 	"github.com/rwcarlsen/goexif/exif"
 )
 
+// Supported media file extensions
+var (
+	ImageExts = []string{".jpg", ".jpeg", ".png"}
+	VideoExts = []string{".mp4", ".mov"}
+)
+
+const (
+	LIMIT_TIME     = 12 // h
+	LIMIT_DISTANCE = 1  // km
+)
+
 // MediaFile 表示一个媒体文件（照片或视频）
 type MediaFile struct {
 	Path      string
@@ -80,8 +91,8 @@ func clusterMediaFiles(dirPath string) ([]Cluster, error) {
 		// 计算时间差（小时）
 		timeDiff := file.Timestamp.Sub(currentTime).Hours()
 
-		// 如果距离大于200米或时间差大于12小时，创建新聚类
-		if distance > 0.2 || timeDiff > 12 {
+		// 如果距离大于1000米或时间差大于12小时，创建新聚类
+		if distance > LIMIT_DISTANCE || timeDiff > LIMIT_TIME {
 			clusters = append(clusters, currentCluster)
 			currentCluster = Cluster{file.Path}
 			currentLat = file.Lat
@@ -132,7 +143,7 @@ func getMediaFiles(dirPath string) ([]MediaFile, error) {
 
 		// 检查文件扩展名
 		ext := strings.ToLower(filepath.Ext(path))
-		if ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".mp4" || ext == ".mov" {
+		if contains(ImageExts, ext) || contains(VideoExts, ext) {
 			// 提取元数据
 			mediaFile, err := extractMetadata(path)
 			if err != nil {
@@ -153,6 +164,16 @@ func getMediaFiles(dirPath string) ([]MediaFile, error) {
 	return mediaFiles, nil
 }
 
+// contains 检查字符串是否在切片中
+func contains(slice []string, item string) bool {
+	for _, s := range slice {
+		if s == item {
+			return true
+		}
+	}
+	return false
+}
+
 // extractMetadata 从媒体文件中提取元数据
 func extractMetadata(filePath string) (MediaFile, error) {
 	ext := strings.ToLower(filepath.Ext(filePath))
@@ -161,11 +182,13 @@ func extractMetadata(filePath string) (MediaFile, error) {
 	var timestamp time.Time
 	var err error
 
-	if ext == ".jpg" || ext == ".jpeg" {
-		lat, lng, timestamp, err = extractJpegMetadata(filePath)
-	} else if ext == ".png" {
-		lat, lng, timestamp, err = extractPngMetadata(filePath)
-	} else if ext == ".mp4" || ext == ".mov" {
+	if contains(ImageExts, ext) {
+		if ext == ".jpg" || ext == ".jpeg" {
+			lat, lng, timestamp, err = extractJpegMetadata(filePath)
+		} else if ext == ".png" {
+			lat, lng, timestamp, err = extractPngMetadata(filePath)
+		}
+	} else if contains(VideoExts, ext) {
 		// 对于视频文件，我们可能需要使用其他库
 		// 这里简化处理，使用文件修改时间
 		fileInfo, err := os.Stat(filePath)
@@ -255,10 +278,52 @@ func copyFilesToClusters(clusters []Cluster, outputDir string) error {
 		return err
 	}
 
+	// 创建Unclassified目录
+	unclassifiedDir := filepath.Join(outputDir, "Unclassified")
+	err = os.MkdirAll(unclassifiedDir, 0755)
+	if err != nil {
+		return err
+	}
+
 	// 为每个聚类创建目录并复制文件
-	for i, cluster := range clusters {
-		clusterDir := filepath.Join(outputDir, fmt.Sprintf("cluster_%d", i+1))
-		err := os.MkdirAll(clusterDir, 0755)
+	for _, cluster := range clusters {
+		// 获取聚类中第一个文件的时间戳和位置
+		firstFilePath := cluster[0]
+		mediaFile, err := extractMetadata(firstFilePath)
+		if err != nil {
+			// 如果无法获取元数据，将所有文件放入Unclassified目录
+			for _, filePath := range cluster {
+				fileName := filepath.Base(filePath)
+				destPath := filepath.Join(unclassifiedDir, fileName)
+				if err := files.CopyFile(filePath, destPath); err != nil {
+					fmt.Printf("警告: 无法复制文件 %s: %v\n", filePath, err)
+				}
+			}
+			continue
+		}
+
+		// 检查是否有有效的时间和位置信息
+		if mediaFile.Timestamp.IsZero() && (mediaFile.Lat == 0 && mediaFile.Lng == 0) {
+			// 如果没有有效信息，放入Unclassified目录
+			for _, filePath := range cluster {
+				fileName := filepath.Base(filePath)
+				destPath := filepath.Join(unclassifiedDir, fileName)
+				if err := files.CopyFile(filePath, destPath); err != nil {
+					fmt.Printf("警告: 无法复制文件 %s: %v\n", filePath, err)
+				}
+			}
+			continue
+		}
+
+		// 格式化时间戳为 YY.M.D-HH
+		timeStr := mediaFile.Timestamp.Format("06.1.2-15")
+
+		// 格式化位置为 lat,lng
+		locStr := fmt.Sprintf("%.0f,%.0f", mediaFile.Lat, mediaFile.Lng)
+
+		// 生成目录名
+		clusterDir := filepath.Join(outputDir, fmt.Sprintf("%s-(%s)", timeStr, locStr))
+		err = os.MkdirAll(clusterDir, 0755)
 		if err != nil {
 			return err
 		}
@@ -270,9 +335,8 @@ func copyFilesToClusters(clusters []Cluster, outputDir string) error {
 			destPath := filepath.Join(clusterDir, fileName)
 
 			// 复制文件
-			err := files.CopyFile(filePath, destPath)
-			if err != nil {
-				return err
+			if err := files.CopyFile(filePath, destPath); err != nil {
+				fmt.Printf("警告: 无法复制文件 %s: %v\n", filePath, err)
 			}
 		}
 	}
