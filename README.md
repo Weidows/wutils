@@ -22,8 +22,8 @@ cover: https://pan.weidows.tech/d/local/blog/1d36e9d50555af6fca23e5fd36246cf5490
  * @Author: Weidows
  * @LastEditors: Weidows
  * @Date: 2022-08-30 14:51:11
- * @LastEditTime: 2025-03-17 01:25:22
- * @FilePath: \wutils\README.md
+ * @LastEditTime: 2025-12-02 22:19:20
+ * @FilePath: \Blog-private\source\_posts\lang\golang\wutils\README.md
  * @Description:
  * @:
  * ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡏⠻⣄
@@ -120,16 +120,14 @@ https://github.com/Weidows/wutils/releases
   - then some integrations and transfers will be gradully added.
 
 ```console
-> ./wutils
+╰─ 👉wutils
+Failed to find configuration ./config/cmd/wutils.yml
 NAME:
    wutils - Documents(使用指南) at here:
             https://blog.weidows.tech/post/lang/golang/wutils
 
 USAGE:
-   wutils [global options] command [command options]
-
-AUTHOR:
-   Weidows <ceo@weidows.tech>
+   wutils [global options] command [command options]                                                                                                                        AUTHOR: Weidows <ceo@weidows.tech>
 
 COMMANDS:
    config        print config file
@@ -144,6 +142,8 @@ COMMANDS:
    ol            Opacity Listener
                  后台持续运行, 并每隔指定时间扫一次运行的窗口
                  把指定窗口设置opacity, 使其透明化 (same as BLend)
+   zip           some actions to operate zip/7z files
+   media         some actions to operate image or video files
    help, h       Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:

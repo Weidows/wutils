@@ -3,18 +3,21 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/Weidows/wutils/cmd/wutils/diff"
-	"github.com/Weidows/wutils/cmd/wutils/keep_runner"
 	"github.com/Weidows/wutils/cmd/wutils/media"
+	"github.com/Weidows/wutils/cmd/wutils/runner"
 	"github.com/Weidows/wutils/cmd/wutils/zip"
 	"github.com/Weidows/wutils/utils/log"
 	"github.com/urfave/cli/v2"
+	"gopkg.in/yaml.v3"
 )
 
 var (
-	logger = log.GetLogger()
-	kr     = keep_runner.NewKeepRunner(logger)
+	logger     = log.GetLogger()
+	kr         *runner.Scope
+	configPath string
 
 	app = &cli.App{
 		Name: "wutils",
@@ -25,13 +28,84 @@ var (
 		EnableBashCompletion: true,
 		Usage: "Documents(使用指南) at here:\n" +
 			"https://blog.weidows.tech/post/lang/golang/wutils",
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:    "config",
+				Aliases: []string{"c"},
+				Usage:   "path to config file",
+			},
+		},
+		Before: func(cCtx *cli.Context) error {
+			configPath = cCtx.String("config")
+			if configPath == "" {
+				home, _ := os.UserHomeDir()
+				ymlPath := filepath.Join(home, ".wutils.yml")
+				yamlPath := filepath.Join(home, ".wutils.yaml")
+				if _, err := os.Stat(ymlPath); err == nil {
+					configPath = ymlPath
+				} else if _, err := os.Stat(yamlPath); err == nil {
+					configPath = yamlPath
+				} else {
+					// Generate default config at ~/.wutils.yml
+					configPath = ymlPath
+					defaultConfig := runner.Config{
+						Parallel: struct {
+							Dsg bool
+							Ol  bool
+						}{Dsg: true, Ol: true},
+						Dsg: struct {
+							Disk  []string `required:"true"`
+							Delay int      `default:"30"`
+						}{Disk: []string{"E:"}, Delay: 30},
+						Ol: struct {
+							Delay    int `default:"2"`
+							Patterns []struct {
+								Title   string
+								Opacity byte
+							}
+						}{Delay: 2, Patterns: []struct {
+							Title   string
+							Opacity byte
+						}{
+							{Title: "(XY|xy)plorer", Opacity: 200},
+							{Title: "设置$", Opacity: 220},
+						}},
+					}
+					data, err := yaml.Marshal(&defaultConfig)
+					if err != nil {
+						return err
+					}
+					if err := os.MkdirAll(filepath.Dir(configPath), 0755); err != nil {
+						return err
+					}
+					err = os.WriteFile(configPath, data, 0644)
+					if err != nil {
+						return err
+					}
+				}
+			}
+			kr = runner.NewKeepRunner(logger, configPath)
+			return nil
+		},
+
 		Commands: []*cli.Command{
 			{
 				Name:  "config",
-				Usage: "print config file",
-				Action: func(cCtx *cli.Context) (err error) {
-					logger.Println(fmt.Sprintf("%+v", kr.Config))
-					return err
+				Usage: "config operations",
+				Subcommands: []*cli.Command{
+					{
+						Name:  "cat",
+						Usage: "show config file location and content",
+						Action: func(cCtx *cli.Context) (err error) {
+							fmt.Printf("Config file: %s\n\n", configPath)
+							content, err := os.ReadFile(configPath)
+							if err != nil {
+								return fmt.Errorf("failed to read config file: %v", err)
+							}
+							fmt.Println(string(content))
+							return nil
+						},
+					},
 				},
 			},
 
@@ -73,6 +147,7 @@ var (
 					return err
 				},
 			},
+
 			{
 				Name:      "dsg",
 				UsageText: "",
@@ -84,6 +159,7 @@ var (
 					return err
 				},
 			},
+
 			{
 				Name: "ol",
 				Usage: "Opacity Listener\n" +
@@ -104,6 +180,7 @@ var (
 					},
 				},
 			},
+
 			{
 				Name:  "zip",
 				Usage: "some actions to operate zip/7z files",

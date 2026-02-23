@@ -1,4 +1,4 @@
-package keep_runner
+package runner
 
 import (
 	"fmt"
@@ -13,39 +13,16 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const ConfigPath = "./config/cmd/wutils.yml"
-
 // Scope 定义了配置和日志记录器的结构体
 type Scope struct {
-	Logger *logrus.Logger
-	Config struct {
-		Debug   bool `default:"false"`
-		Refresh struct {
-			Delay int `default:"10"`
-		}
-		Parallel struct {
-			Dsg bool
-			Ol  bool
-		}
-
-		Dsg struct {
-			Disk  []string `required:"true"`
-			Delay int      `default:"30"`
-		} `yaml:"dsg" required:"true"`
-
-		Ol struct {
-			Delay    int `default:"2"`
-			Patterns []struct {
-				Title   string
-				Opacity byte
-			}
-		}
-	}
+	Logger     *logrus.Logger
+	Config     Config
+	ConfigPath string
 }
 
 // NewKeepRunner 初始化 Scope 实例
-func NewKeepRunner(logger *logrus.Logger) *Scope {
-	s := &Scope{Logger: logger}
+func NewKeepRunner(logger *logrus.Logger, configPath string) *Scope {
+	s := &Scope{Logger: logger, ConfigPath: configPath}
 	go s.init()
 	time.Sleep(time.Millisecond * 50)
 	return s
@@ -54,7 +31,7 @@ func NewKeepRunner(logger *logrus.Logger) *Scope {
 // init 加载配置文件并定期刷新
 func (s *Scope) init() {
 	for {
-		_ = configor.Load(&s.Config, ConfigPath)
+		_ = configor.Load(&s.Config, s.ConfigPath)
 		if s.Config.Refresh.Delay < 1 {
 			s.Config.Refresh.Delay = 1
 		}
