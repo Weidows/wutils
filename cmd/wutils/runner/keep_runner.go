@@ -32,10 +32,10 @@ func NewKeepRunner(logger *logrus.Logger, configPath string) *Scope {
 func (s *Scope) init() {
 	for {
 		_ = configor.Load(&s.Config, s.ConfigPath)
-		if s.Config.Refresh.Delay < 1 {
-			s.Config.Refresh.Delay = 1
+		if s.Config.Runner.Refresh < 1 {
+			s.Config.Runner.Refresh = 1
 		}
-		time.Sleep(time.Second * time.Duration(s.Config.Refresh.Delay))
+		time.Sleep(time.Second * time.Duration(s.Config.Runner.Refresh))
 	}
 }
 
@@ -77,7 +77,7 @@ func (s *Scope) Ol() {
 			}) {
 				if grammar.Match(pattern.Title, window.Title) && pattern.Opacity != window.Opacity {
 					isSuccess := os2.SetWindowOpacity(window.Handle, pattern.Opacity)
-					if s.Config.Debug {
+					if s.Config.App.Debug {
 						s.Logger.Println(isSuccess, window, pattern)
 					}
 				}

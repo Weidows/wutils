@@ -49,6 +49,19 @@ var (
 					// Generate default config at ~/.wutils.yml
 					configPath = ymlPath
 					defaultConfig := runner.Config{
+						App: runner.AppConfig{
+							Name:    "wutils",
+							Version: "1.0.0",
+							Debug:   false,
+						},
+						Logging: runner.LoggingConfig{
+							Level:  "info",
+							Format: "json",
+						},
+						Runner: runner.RunnerConfig{
+							MaxWorkers: 4,
+							Timeout:    "30s",
+						},
 						Parallel: struct {
 							Dsg bool
 							Ol  bool

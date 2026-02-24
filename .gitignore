@@ -16,3 +16,5 @@
 
 node_modules
 .idea
+
+cmd/wutils/media/test/output
