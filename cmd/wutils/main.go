@@ -6,16 +6,17 @@ import (
 	"path/filepath"
 
 	"github.com/Weidows/wutils/cmd/wutils/diff"
+	"github.com/Weidows/wutils/cmd/wutils/extract"
 	"github.com/Weidows/wutils/cmd/wutils/media"
 	"github.com/Weidows/wutils/cmd/wutils/runner"
 	"github.com/Weidows/wutils/cmd/wutils/zip"
-	"github.com/Weidows/wutils/utils/log"
+	logutil "github.com/Weidows/wutils/utils/log"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/yaml.v3"
 )
 
 var (
-	logger     = log.GetLogger()
+	logger     = logutil.GetLogger()
 	kr         *runner.Scope
 	configPath string
 
@@ -236,6 +237,19 @@ var (
 							return nil
 						},
 					},
+				},
+			},
+
+			{
+				Name:  "extract",
+				Usage: "解散一级目录, 将子目录内容提取到父目录",
+				Action: func(c *cli.Context) error {
+					if c.Args().Len() < 2 {
+						return fmt.Errorf("用法: wutils extract <mode> <path>\nmode: 0=自动检查, 1=覆盖, 2=跳过")
+					}
+					mode := c.Args().Get(0)
+					rootPath := c.Args().Get(1)
+					return extract.Run(mode, rootPath)
 				},
 			},
 		},
