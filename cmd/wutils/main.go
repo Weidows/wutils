@@ -7,6 +7,7 @@ import (
 
 	"github.com/Weidows/wutils/cmd/wutils/diff"
 	"github.com/Weidows/wutils/cmd/wutils/extract"
+	"github.com/Weidows/wutils/cmd/wutils/gmm"
 	"github.com/Weidows/wutils/cmd/wutils/media"
 	"github.com/Weidows/wutils/cmd/wutils/runner"
 	"github.com/Weidows/wutils/cmd/wutils/zip"
@@ -250,6 +251,60 @@ var (
 					mode := c.Args().Get(0)
 					rootPath := c.Args().Get(1)
 					return extract.Run(mode, rootPath)
+				},
+			},
+
+			{
+				Name:  "gmm",
+				Usage: "Golang Mirror Manager - 测试/切换 Go 模块代理",
+				Subcommands: []*cli.Command{
+					{
+						Name:    "test",
+						Aliases: []string{"t"},
+						Usage:   "测试所有代理速度",
+						Action: func(c *cli.Context) error {
+							gmm.TestSpeed()
+							return nil
+						},
+					},
+					{
+						Name:    "proxy",
+						Aliases: []string{"p"},
+						Usage:   "设置 GOPROXY",
+						Action: func(c *cli.Context) error {
+							if c.Args().Len() < 1 {
+								return fmt.Errorf("用法: wutils gmm proxy <name>\n可用: aliyun, baidu, huawei, tencent, goproxy.cn, proxy-io, default")
+							}
+							return gmm.SetProxy(c.Args().First())
+						},
+					},
+					{
+						Name:    "sumdb",
+						Aliases: []string{"s"},
+						Usage:   "设置 GOSUMDB",
+						Action: func(c *cli.Context) error {
+							if c.Args().Len() < 1 {
+								return fmt.Errorf("用法: wutils gmm sumdb <name>\n可用: default, google, sumdb-io")
+							}
+							return gmm.SetSumdb(c.Args().First())
+						},
+					},
+					{
+						Name:  "list",
+						Usage: "列出所有可用代理",
+						Action: func(c *cli.Context) error {
+							gmm.List()
+							return nil
+						},
+					},
+					{
+						Name:  "current",
+						Usage: "显示当前代理配置",
+						Action: func(c *cli.Context) error {
+							gmm.Current()
+							return nil
+						},
+					},
 				},
 			},
 		},

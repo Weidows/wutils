@@ -14,7 +14,7 @@ import (
 /*
 Ping returns Milliseconds (returns 0 if timeout by 3s)
 
-	 1 Second(s)
+	  1 Second(s)
 		= 10e3 Milliseconds(ms)
 		= 10e6 Microseconds(μs)
 		= 10e9 Nanoseconds(ns)
@@ -25,6 +25,10 @@ func Ping(host string) int64 {
 	host = strings.TrimSpace(host)
 	host = strings.TrimPrefix(host, "http://")
 	host = strings.TrimPrefix(host, "https://")
+
+	if idx := strings.Index(host, "/"); idx != -1 {
+		host = host[:idx]
+	}
 
 	ms := time2.WithTimeOut(time.Second*3, func() int64 {
 		if runtime.GOOS == "windows" {
