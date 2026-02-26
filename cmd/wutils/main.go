@@ -41,15 +41,8 @@ var (
 			configPath = cCtx.String("config")
 			if configPath == "" {
 				home, _ := os.UserHomeDir()
-				ymlPath := filepath.Join(home, ".wutils.yml")
-				yamlPath := filepath.Join(home, ".wutils.yaml")
-				if _, err := os.Stat(ymlPath); err == nil {
-					configPath = ymlPath
-				} else if _, err := os.Stat(yamlPath); err == nil {
-					configPath = yamlPath
-				} else {
-					// Generate default config at ~/.wutils.yml
-					configPath = ymlPath
+				configPath = filepath.Join(home, ".config", "wutils", "app.yml")
+				if _, err := os.Stat(configPath); os.IsNotExist(err) {
 					defaultConfig := runner.Config{
 						App: runner.AppConfig{
 							Name:    "wutils",

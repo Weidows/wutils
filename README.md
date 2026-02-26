@@ -22,8 +22,8 @@ cover: https://pan.weidows.tech/d/local/blog/1d36e9d50555af6fca23e5fd36246cf5490
  * @Author: Weidows
  * @LastEditors: Weidows
  * @Date: 2022-08-30 14:51:11
- * @LastEditTime: 2025-12-02 22:19:20
- * @FilePath: \Blog-private\source\_posts\lang\golang\wutils\README.md
+ * @LastEditTime: 2026-02-26 15:57:17
+ * @FilePath: \wutils\README.md
  * @Description:
  * @:
  * ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡏⠻⣄
@@ -58,24 +58,22 @@ cover: https://pan.weidows.tech/d/local/blog/1d36e9d50555af6fca23e5fd36246cf5490
 {% pullquote mindmap mindmap-sm %}
 
 - [Docs-wutils](#docs-wutils)
+    - [install](#install)
   - [Cmd](#cmd)
-    - [install-and-config](#install-and-config)
     - [wutils](#wutils)
       - [parallel](#parallel)
       - [ol-Opacity\_Listener](#ol-opacity_listener)
         - [特点-feature](#特点-feature)
-        - [配置-Config](#配置-config)
         - [教程-tutorial](#教程-tutorial)
       - [dsg-Disk\_sleep\_guard](#dsg-disk_sleep_guard)
       - [diff](#diff)
       - [zip](#zip)
         - [crack](#crack)
       - [media](#media)
-    - [common-starter](#common-starter)
-    - [subdir-extracter](#subdir-extracter)
-      - [usage](#usage)
-      - [example](#example)
-    - [gmm](#gmm)
+      - [subdir-extracter](#subdir-extracter)
+        - [usage](#usage)
+        - [example](#example)
+      - [gmm](#gmm)
   - [Pkg](#pkg)
     - [zip](#zip-1)
   - [Utils](#utils)
@@ -85,17 +83,9 @@ cover: https://pan.weidows.tech/d/local/blog/1d36e9d50555af6fca23e5fd36246cf5490
 
 <a>![分割线](https://pan.weidows.tech/d/local/img/divider.png)</a>
 
-## Cmd
-
-一些命令行程序, 基本都是我自己需要用的, 没找到符合需求的就简单写一个, 针对 `服务 (service)`
-
-### install-and-config
+### install
 
 ```shell
-# install with golang
-go install github.com/Weidows/wutils/cmd/common-starter@master
-go install github.com/Weidows/wutils/cmd/gmm@master
-go install github.com/Weidows/wutils/cmd/subdir-extracter@master
 go install github.com/Weidows/wutils/cmd/wutils@master
 
 # or use scoop
@@ -108,7 +98,11 @@ https://github.com/Weidows/wutils/releases
 > 默认配置 | default config: https://github.com/Weidows/wutils/tree/master/config \
 > 如果是 scoop / release 安装, 配置会在压缩包内
 
----
+<a>![分割线](https://pan.weidows.tech/d/local/img/divider.png)</a>
+
+## Cmd
+
+一些命令行程序, 基本都是我自己需要用的, 没找到符合需求的就简单写一个, 针对 `服务 (service)`
 
 ### wutils
 
@@ -170,54 +164,9 @@ wutils 部分子程序设计为根据 [配置文件](https://github.com/Weidows/
 
 ##### 特点-feature
 
-1. 现在大多数能搜到的工具比较手动, 每个新开的窗口都要再手动设置一次
-
-   wutils 只需要改一次配置, 开多少窗口都能立即起效
-
-2. 参数可调
-
-   同一程序的透明度统一控制
-
-   不同程序的透明度分开控制
-
-3. 配置化
-
-   免得每次启动调来调去
-
-4. 还会继续更新
-
-   哈哈, 毕竟主要是我自己也在用
-
----
-
-##### 配置-Config
-
-路径为 `config/cmd/wutils.yml`
-
-```yaml
-debug: false
-parallel:
-  dsg: true
-  ol: true
-
-dsg:
-  disk:
-    - "E:"
-    - "D:"
-  delay: 30
-
-ol:
-  delay: 2
-  patterns:
-    - title: xyplorer
-      opacity: 210
-    - title: XYplorer
-      opacity: 210
-    - title: "- Microsoft​ Edge$"
-      opacity: 200
-    - title: "- Visual Studio Code"
-      opacity: 180
-```
+- [x] 现在大多数能搜到的工具比较手动, 每个新开的窗口都要再手动设置一次, wutils 只需要改一次配置, 开多少窗口都能立即起效
+- [x] 参数可调, 同一程序的透明度统一控制, 不同程序的透明度分开控制
+- [x] 配置化, 免得每次启动调来调去 (config/app.yml)
 
 匹配规则是按标题来的, 所以按着上面改就行, 挺直观的
 
@@ -294,19 +243,9 @@ onlyA2
 wutils media group F:/Pictures/@Collections/DCIM/Camera
 ```
 
-<a>![分割线](https://pan.weidows.tech/d/local/img/divider.png)</a>
+---
 
-### common-starter
-
-格式转换启动, 比如某些程序只能启动 .exe, 通过此程序中转启动其他格式的, 比如 .bat
-
-```console
-> common-starter ./test.bat
-```
-
-<a>![分割线](https://pan.weidows.tech/d/local/img/divider.png)</a>
-
-### subdir-extracter
+#### subdir-extracter
 
 主要功能为解散一级目录
 
@@ -314,7 +253,7 @@ wutils media group F:/Pictures/@Collections/DCIM/Camera
 - [x] 重复文件进行 hash 校验 (前缀重命名法不会有误删, 删除的是完全一致的文件)
 - [ ] 提取为 Lib 到 utils 可供调用
 
-#### usage
+##### usage
 
 ```
 subdir-extracter 0 ./1
@@ -331,7 +270,7 @@ params:
 
 ---
 
-#### example
+##### example
 
 如下为解散前后, 测试文件在 `cmd/subdir-extracter/1`
 
@@ -366,40 +305,14 @@ D:\DESKTOP\1
 
 也没有对应工具可以用, 所以就写了这个
 
-<a>![分割线](https://pan.weidows.tech/d/local/img/divider.png)</a>
+---
 
-### gmm
+#### gmm
 
 Golang package Mirror Manager
 
 - [x] 结果排序
 - [x] 协程加速
-
----
-
-```console
-> gmm test
-proxy
-      125ms   huawei
-      178ms   baidu
-      219ms   aliyun
-      338ms   proxy-cn
-      476ms   default
-      612ms   proxy-io
-      623ms   tencent
-sumdb
-      433ms   google
-      451ms   default
-      743ms   sumdb-io
-```
-
-```console
-╰─ gmm proxy huawei
-Proxy use huawei https://repo.huaweicloud.com/repository/goproxy
-
-╰─ gmm sumdb default
-Sumdb use default https://sum.golang.org
-```
 
 <a>![分割线](https://pan.weidows.tech/d/local/img/divider.png)</a>
 

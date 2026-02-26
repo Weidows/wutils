@@ -1,8 +1,16 @@
 package zip
 
-import "testing"
+import (
+	"os"
+	"path/filepath"
+	"testing"
+)
 
 func TestCrackPassword(t *testing.T) {
+	home, _ := os.UserHomeDir()
+	passwordDictPath := filepath.Join(home, ".config", "wutils", "password-dict.txt")
+	os.WriteFile(passwordDictPath, []byte("test\nwrong\n123456"), 0644)
+
 	type args struct {
 		archivePath string
 	}
@@ -11,7 +19,6 @@ func TestCrackPassword(t *testing.T) {
 		args args
 		want string
 	}{
-		// TODO: Add test cases.
 		{
 			name: "test",
 			args: args{
