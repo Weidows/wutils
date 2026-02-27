@@ -31,7 +31,7 @@ func getHomePasswordFilePath() (string, error) {
 			return "", fmt.Errorf("failed to create directory: %w", err)
 		}
 		defaultContent := []byte("# Add your password dictionary here, one password per line\n" +
-			"123456\npassword\n" +
+			"test\n123456\npassword\n" +
 			"admin\n12345678\n")
 		if err := os.WriteFile(path, defaultContent, 0644); err != nil {
 			return "", fmt.Errorf("failed to create password file: %w", err)

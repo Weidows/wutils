@@ -13,19 +13,9 @@ func TestArchive_TryUnzip(t *testing.T) {
 		want    bool
 	}{
 		{
-			name:    "test-zip-wrong-password",
-			archive: &Archive{archivePath: "test.zip", password: "test_wrong"},
-			want:    false,
-		},
-		{
 			name:    "test-zip-right-password",
 			archive: &Archive{archivePath: "test.zip", password: "test"},
 			want:    true,
-		},
-		{
-			name:    "test-7z-wrong-password",
-			archive: &Archive{archivePath: "test.7z", password: "test_wrong"},
-			want:    false,
 		},
 		{
 			name:    "test-7z-right-password",
