@@ -32,16 +32,16 @@ func NewKeepRunner(logger *logrus.Logger, configPath string) *Scope {
 func (s *Scope) init() {
 	for {
 		_ = configor.Load(&s.Config, s.ConfigPath)
-		if s.Config.Runner.Refresh < 1 {
-			s.Config.Runner.Refresh = 1
+		if s.Config.Refresh < 1 {
+			s.Config.Refresh = 1
 		}
-		time.Sleep(time.Second * time.Duration(s.Config.Runner.Refresh))
+		time.Sleep(time.Second * time.Duration(s.Config.Refresh))
 	}
 }
 
 // Dsg 执行 DSG 任务
 func (s *Scope) Dsg() {
-	s.Logger.Infoln(s.Config.Dsg)
+	s.Logger.Infoln(s.Config.Cmd.Dsg)
 	writeString := func(disk string) {
 		f := strings.Join([]string{disk, ".dsg"}, "/")
 
@@ -54,16 +54,16 @@ func (s *Scope) Dsg() {
 	}
 
 	for true {
-		collection.ForEach(s.Config.Dsg.Disk, func(i int, v string) {
+		collection.ForEach(s.Config.Cmd.Dsg.Disk, func(i int, v string) {
 			go writeString(v)
 		})
-		time.Sleep(time.Second * time.Duration(s.Config.Dsg.Delay))
+		time.Sleep(time.Second * time.Duration(s.Config.Cmd.Dsg.Delay))
 	}
 }
 
 // Ol 执行 OL 任务
 func (s *Scope) Ol() {
-	s.Logger.Infoln(s.Config.Ol)
+	s.Logger.Infoln(s.Config.Cmd.Ol)
 
 	for true {
 		windows := os2.GetEnumWindowsInfo(&os2.EnumWindowsFilter{
@@ -71,7 +71,7 @@ func (s *Scope) Ol() {
 			IgnoreInvisible: true,
 		})
 		collection.ForEach(windows, func(i int, window *os2.EnumWindowsResult) {
-			collection.ForEach(s.Config.Ol.Patterns, func(ii int, pattern struct {
+			collection.ForEach(s.Config.Cmd.Ol.Patterns, func(ii int, pattern struct {
 				Title   string
 				Opacity byte
 			}) {
@@ -83,7 +83,7 @@ func (s *Scope) Ol() {
 				}
 			})
 		})
-		time.Sleep(time.Second * time.Duration(s.Config.Ol.Delay))
+		time.Sleep(time.Second * time.Duration(s.Config.Cmd.Ol.Delay))
 	}
 }
 

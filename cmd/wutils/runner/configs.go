@@ -18,22 +18,22 @@ type RunnerConfig struct {
 }
 
 type Config struct {
-	App      AppConfig
-	Logging  LoggingConfig
-	Runner   RunnerConfig
-	Parallel struct {
-		Dsg bool
-		Ol  bool
-	}
-	Dsg struct {
-		Disk  []string `required:"true"`
-		Delay int      `default:"30"`
-	} `yaml:"dsg" required:"true"`
-	Ol struct {
-		Delay    int `default:"2"`
-		Patterns []struct {
-			Title   string
-			Opacity byte
+	App     AppConfig
+	Logging LoggingConfig
+	Refresh int `default:"10"`
+	Cmd     struct {
+		Dsg struct {
+			Parallel bool
+			Disk     []string `required:"true"`
+			Delay    int      `default:"30"`
+		}
+		Ol struct {
+			Parallel bool
+			Delay    int `default:"2"`
+			Patterns []struct {
+				Title   string
+				Opacity byte
+			}
 		}
 	}
 }

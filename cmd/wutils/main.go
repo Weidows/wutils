@@ -53,31 +53,42 @@ var (
 							Level:  "info",
 							Format: "json",
 						},
-						Runner: runner.RunnerConfig{
-							MaxWorkers: 4,
-							Timeout:    "30s",
-						},
-						Parallel: struct {
-							Dsg bool
-							Ol  bool
-						}{Dsg: true, Ol: true},
-						Dsg: struct {
-							Disk  []string `required:"true"`
-							Delay int      `default:"30"`
-						}{Disk: []string{"E:"}, Delay: 30},
-						Ol: struct {
-							Delay    int `default:"2"`
-							Patterns []struct {
+						Refresh: 10,
+						Cmd: struct {
+							Dsg struct {
+								Parallel bool
+								Disk     []string `required:"true"`
+								Delay    int      `default:"30"`
+							}
+							Ol struct {
+								Parallel bool
+								Delay    int `default:"2"`
+								Patterns []struct {
+									Title   string
+									Opacity byte
+								}
+							}
+						}{
+							Dsg: struct {
+								Parallel bool
+								Disk     []string `required:"true"`
+								Delay    int      `default:"30"`
+							}{Parallel: true, Disk: []string{"E:"}, Delay: 30},
+							Ol: struct {
+								Parallel bool
+								Delay    int `default:"2"`
+								Patterns []struct {
+									Title   string
+									Opacity byte
+								}
+							}{Parallel: true, Delay: 2, Patterns: []struct {
 								Title   string
 								Opacity byte
-							}
-						}{Delay: 2, Patterns: []struct {
-							Title   string
-							Opacity byte
-						}{
-							{Title: "(XY|xy)plorer", Opacity: 200},
-							{Title: "设置$", Opacity: 220},
-						}},
+							}{
+								{Title: "(XY|xy)plorer", Opacity: 200},
+								{Title: "设置$", Opacity: 220},
+							}},
+						},
 					}
 					data, err := yaml.Marshal(&defaultConfig)
 					if err != nil {
@@ -145,10 +156,10 @@ var (
 				Aliases: []string{"pl"},
 				Usage:   "并行+后台执行任务 (配置取自wutils.yml)",
 				Action: func(cCtx *cli.Context) (err error) {
-					if kr.Config.Parallel.Dsg {
+					if kr.Config.Cmd.Dsg.Parallel {
 						go kr.Dsg()
 					}
-					if kr.Config.Parallel.Ol {
+					if kr.Config.Cmd.Ol.Parallel {
 						kr.Ol()
 					}
 
