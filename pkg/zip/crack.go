@@ -53,8 +53,8 @@ func (a *Archive) Unzip(destDir string) Result {
 	}
 }
 
-// TryUnzip attempts to unzip the archive with the given password
-// Returns true if successful, false otherwise (deprecated: use Unzip instead)
+// TryUnzip verifies if the password is correct without extracting files
+// Returns true if successful, false otherwise
 func (a *Archive) TryUnzip() bool {
 	ext := strings.ToLower(filepath.Ext(a.archivePath))
 	switch ext {
@@ -65,12 +65,24 @@ func (a *Archive) TryUnzip() bool {
 		}
 		defer reader.Close()
 
+		if len(reader.File) == 0 {
+			return false
+		}
+
 		for _, file := range reader.File {
-			if err := a.extractZipFile(file, "."); err != nil {
+			file.SetPassword(a.password)
+			rc, err := file.Open()
+			if err != nil {
 				return false
 			}
-			return true
+			buf := make([]byte, 1)
+			_, err = rc.Read(buf)
+			rc.Close()
+			if err != nil {
+				return false
+			}
 		}
+		return true
 
 	case ".7z":
 		reader, err := sevenzip.OpenReaderWithPassword(a.archivePath, a.password)
@@ -78,13 +90,7 @@ func (a *Archive) TryUnzip() bool {
 			return false
 		}
 		defer reader.Close()
-
-		for _, file := range reader.File {
-			if err := a.extract7zFile(file, "."); err != nil {
-				return false
-			}
-			return true
-		}
+		return true
 	}
 
 	return false

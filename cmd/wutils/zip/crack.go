@@ -18,7 +18,7 @@ const (
 	passwordFile      = "password-dict.txt"
 )
 
-func getPasswordFilePath() (string, error) {
+func getHomePasswordFilePath() (string, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", fmt.Errorf("failed to get home directory: %w", err)
@@ -42,7 +42,7 @@ func getPasswordFilePath() (string, error) {
 }
 
 func CrackPassword(archivePath string) string {
-	passwordFilePath, err := getPasswordFilePath()
+	passwordFilePath, err := getHomePasswordFilePath()
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return ""
