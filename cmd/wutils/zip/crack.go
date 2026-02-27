@@ -42,26 +42,32 @@ func getHomePasswordFilePath() (string, error) {
 }
 
 func CrackPassword(archivePath string) string {
-	passwordFilePath, err := getHomePasswordFilePath()
-	if err != nil {
-		fmt.Printf("Error: %v\n", err)
-		return ""
+	return CrackPasswordWithList(archivePath, nil)
+}
+
+func CrackPasswordWithList(archivePath string, passwords []string) string {
+	if passwords == nil {
+		passwordFilePath, err := getHomePasswordFilePath()
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+			return ""
+		}
+
+		passwordData, err := os.ReadFile(passwordFilePath)
+		if err != nil {
+			fmt.Printf("Error: failed to read password file: %v\n", err)
+			return ""
+		}
+
+		passwords = parsePasswords(string(passwordData))
+		if len(passwords) == 0 {
+			fmt.Println("Error: no valid passwords found in dictionary")
+			fmt.Printf("Please add passwords to: %s\n", passwordFilePath)
+			return ""
+		}
 	}
 
-	passwords, err := os.ReadFile(passwordFilePath)
-	if err != nil {
-		fmt.Printf("Error: failed to read password file: %v\n", err)
-		return ""
-	}
-
-	passwordList := parsePasswords(string(passwords))
-	if len(passwordList) == 0 {
-		fmt.Println("Error: no valid passwords found in dictionary")
-		fmt.Printf("Please add passwords to: %s\n", passwordFilePath)
-		return ""
-	}
-
-	result := crackWithWorkers(archivePath, passwordList, defaultMaxWorkers)
+	result := crackWithWorkers(archivePath, passwords, defaultMaxWorkers)
 	if result != "" {
 		fmt.Printf("Password found: %s\n", result)
 	} else {
