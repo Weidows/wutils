@@ -20,9 +20,8 @@ jobs:
         #   - goarch: arm64
         #     goos: windows
     steps:
-      - uses: actions/checkout@v3
-      #      - uses: wangyoucao577/go-release-action@v1
-      - uses: Weidows/go-release-action@feature/multi-binaries
+      - uses: actions/checkout@v4
+      - uses: wangyoucao577/go-release-action@latest
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           goos: windows
