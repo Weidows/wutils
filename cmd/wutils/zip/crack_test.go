@@ -8,7 +8,10 @@ import (
 
 func TestCrackPassword(t *testing.T) {
 	home, _ := os.UserHomeDir()
-	passwordDictPath := filepath.Join(home, ".config", "wutils", "password-dict.txt")
+	configDir := filepath.Join(home, ".config", "wutils")
+	passwordDictPath := filepath.Join(configDir, "password-dict.txt")
+
+	os.MkdirAll(configDir, 0755)
 	os.WriteFile(passwordDictPath, []byte("test\nwrong\n123456"), 0644)
 
 	type args struct {
