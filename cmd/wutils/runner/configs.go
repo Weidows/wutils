@@ -37,3 +37,53 @@ type Config struct {
 		}
 	}
 }
+
+func DefaultConfig() Config {
+	return Config{
+		App: AppConfig{
+			Name:    "wutils",
+			Version: "1.0.0",
+			Debug:   false,
+		},
+		Logging: LoggingConfig{
+			Level:  "info",
+			Format: "json",
+		},
+		Refresh: 10,
+		Cmd: struct {
+			Dsg struct {
+				Parallel bool
+				Disk     []string `required:"true"`
+				Delay    int      `default:"30"`
+			}
+			Ol struct {
+				Parallel bool
+				Delay    int `default:"2"`
+				Patterns []struct {
+					Title   string
+					Opacity byte
+				}
+			}
+		}{
+			Dsg: struct {
+				Parallel bool
+				Disk     []string `required:"true"`
+				Delay    int      `default:"30"`
+			}{Parallel: true, Disk: []string{"E:"}, Delay: 30},
+			Ol: struct {
+				Parallel bool
+				Delay    int `default:"2"`
+				Patterns []struct {
+					Title   string
+					Opacity byte
+				}
+			}{Parallel: true, Delay: 2, Patterns: []struct {
+				Title   string
+				Opacity byte
+			}{
+				{Title: "(XY|xy)plorer", Opacity: 200},
+				{Title: "设置$", Opacity: 220},
+			}},
+		},
+	}
+}
