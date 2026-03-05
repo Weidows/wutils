@@ -22,7 +22,7 @@ cover: https://pan.weidows.tech/d/local/blog/1d36e9d50555af6fca23e5fd36246cf5490
  * @Author: Weidows
  * @LastEditors: Weidows
  * @Date: 2022-08-30 14:51:11
- * @LastEditTime: 2026-02-26 15:57:17
+ * @LastEditTime: 2026-03-03 10:59:18
  * @FilePath: \wutils\README.md
  * @Description:
  * @:
@@ -58,7 +58,7 @@ cover: https://pan.weidows.tech/d/local/blog/1d36e9d50555af6fca23e5fd36246cf5490
 {% pullquote mindmap mindmap-sm %}
 
 - [Docs-wutils](#docs-wutils)
-    - [install](#install)
+  - [install](#install)
   - [Cmd](#cmd)
     - [wutils](#wutils)
       - [parallel](#parallel)
@@ -74,6 +74,12 @@ cover: https://pan.weidows.tech/d/local/blog/1d36e9d50555af6fca23e5fd36246cf5490
         - [usage](#usage)
         - [example](#example)
       - [gmm](#gmm)
+      - [buffer](#buffer)
+        - [功能特性](#功能特性)
+        - [用法](#用法)
+        - [选项](#选项)
+        - [配置文件](#配置文件)
+        - [注意事项](#注意事项)
   - [Pkg](#pkg)
     - [zip](#zip-1)
   - [Utils](#utils)
@@ -83,7 +89,7 @@ cover: https://pan.weidows.tech/d/local/blog/1d36e9d50555af6fca23e5fd36246cf5490
 
 <a>![分割线](https://pan.weidows.tech/d/local/img/divider.png)</a>
 
-### install
+## install
 
 ```shell
 go install github.com/Weidows/wutils/cmd/wutils@master
@@ -106,12 +112,7 @@ https://github.com/Weidows/wutils/releases
 
 ### wutils
 
-> `CPU`: <0.1% at most time. \
-> `RAM`: <10MB, very tiny.
-
 - [x] 运行时配置热更新
-- [ ] break change: Rename from 'keep-runner' to 'wutils'
-  - then some integrations and transfers will be gradully added.
 
 ```console
 ╰─ 👉wutils
@@ -138,6 +139,7 @@ COMMANDS:
                  把指定窗口设置opacity, 使其透明化 (same as BLend)
    zip           some actions to operate zip/7z files
    media         some actions to operate image or video files
+   buffer        Buffer filesystem - 基于 Dokan 的 IO 缓冲虚拟文件系统
    help, h       Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
@@ -188,12 +190,6 @@ wutils 部分子程序设计为根据 [配置文件](https://github.com/Weidows/
 
 ---
 
-#### dsg-Disk_sleep_guard
-
-参上介绍的
-
----
-
 #### diff
 
 自然, 可以通过 Git 和一些类似的工具实现 '行-差异' 的做法, 但是它们并不能输出, 作为差集
@@ -219,15 +215,19 @@ onlyA2
 
 简而易懂, 破解压缩包
 
-- 把名为 `password.txt` 的字典文件放在命令行所在目录
+- 自动在 `~/.config/wutils/password-dict.txt` 创建默认密码字典
 - 使用协程高速处理
   - `>=1000 test/s`
   - `~50%` CPU usage
   - `nMB ~ nGB` RAM usage
 - supporting
-  - .7z
   - .zip
+  - .7z
+  - .rar
+  - .tar.gz
+  - .tar.bz2
   - 分卷文件 (.zip, .z01, .z02 ....)
+  - 分卷 7z 文件 (.7z.001, .7z.002 ...)
 
 ---
 
@@ -313,6 +313,74 @@ Golang package Mirror Manager
 
 - [x] 结果排序
 - [x] 协程加速
+
+---
+
+#### buffer
+
+Buffer filesystem - 基于 Dokan 的 IO 缓冲虚拟文件系统
+
+用于减少 HDD IOPS，对小文件随机读写场景特别有效。
+
+##### 功能特性
+
+- 基于 Dokan (Windows FUSE) 的透明缓冲
+- 写缓冲（write-behind）：减少写操作次数
+- 读缓冲（LRU + read-ahead）：热点数据缓存和预取
+- 可配置的缓冲策略：monitoring, defrag, download, migration, balanced
+- 支持配置文件管理和热更新
+
+##### 用法
+
+```bash
+# 挂载缓冲盘 X:，指向 D:/data
+wutils buffer mount X: --source D:/data
+
+# 使用自定义内存限制（100MB）
+wutils buffer mount X: --source D:/data --memory-limit 104857600
+
+# 使用自定义刷新间隔（30秒）
+wutils buffer mount X: --source D:/data --flush-interval 30
+
+# 查看状态
+wutils buffer status
+
+# 卸载缓冲盘
+wutils buffer unmount
+```
+
+##### 选项
+
+- `-s, --source` (必需): 源路径，需要缓冲的目录
+- `--memory-limit`: 内存限制，单位字节（默认: 67108864，64MB）
+- `--flush-interval`: 刷新间隔，单位秒（默认: 10）
+- `--strategy`: 缓冲策略
+  - `monitoring`: 监控模式，低延迟
+  - `defrag`: 碎片整理模式，大批量写
+  - `download`: 下载模式，顺序写
+  - `migration`: 迁移模式，批量读写
+  - `balanced`: 平衡模式（默认）
+- `--enable-read-cache`: 启用读缓存（默认: false）
+- `--enable-write-buffer`: 启用写缓冲（默认: true）
+
+##### 配置文件
+
+在 `~/.config/wutils/app.yml` 中配置：
+
+```yaml
+cmd:
+  buffer:
+    enable: false
+    memory_limit: 67108864  # 64MB
+    flush_interval: 10      # 10秒
+    strategy: balanced      # 策略
+```
+
+##### 注意事项
+
+- 需要安装 Dokan 驱动（https://github.com/dokan-dev/dokany）
+- 仅支持 Windows 平台
+- 建议配合 SSD 使用以获得最佳性能
 
 <a>![分割线](https://pan.weidows.tech/d/local/img/divider.png)</a>
 

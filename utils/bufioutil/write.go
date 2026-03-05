@@ -1,10 +1,18 @@
 package bufioutil
 
 import (
+	"errors"
 	"os"
 	"sort"
+	"strings"
 	"sync"
 	"time"
+)
+
+// 错误定义
+var (
+	ErrDiskFull      = errors.New("磁盘空间不足")
+	ErrStorageFailed = errors.New("存储失败")
 )
 
 type FlushStrategy interface {
@@ -200,10 +208,12 @@ func (p *Pool) queueWrite(req WriteRequest) {
 	p.sortedWrites = append(p.sortedWrites, req)
 }
 
-func (p *Pool) Write(filePath string, data []byte, offset int64) {
+func (p *Pool) Write(filePath string, data []byte, offset int64) error {
 	select {
 	case p.writeQueue <- WriteRequest{FilePath: filePath, Data: data, Offset: offset, Time: time.Now()}:
+		return nil
 	default:
+		return errors.New("写入队列已满，无法写入")
 	}
 }
 
@@ -255,12 +265,35 @@ func (p *Pool) flushToDisk(filePath string, data []byte, offset int64) error {
 
 	f, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
-		return err
+		if os.IsPermission(err) {
+			return errors.New("存储失败，权限不足，请检查文件路径权限")
+		}
+		if os.IsNotExist(err) {
+			return errors.New("存储失败，父目录不存在，请确保目标路径有效")
+		}
+		return errors.New("存储失败，无法创建文件: " + err.Error())
 	}
 	defer f.Close()
 
 	_, err = f.WriteAt(data, offset)
-	return err
+	if err != nil {
+		if isDiskFullError(err) {
+			return errors.New("磁盘空间不足，请清理磁盘后重试")
+		}
+		return errors.New("存储失败，写入数据时发生错误: " + err.Error())
+	}
+	return nil
+}
+
+func isDiskFullError(err error) bool {
+	if err == nil {
+		return false
+	}
+	errMsg := strings.ToLower(err.Error())
+	return strings.Contains(errMsg, "no space left") ||
+		strings.Contains(errMsg, "enospc") ||
+		strings.Contains(errMsg, "disk full") ||
+		strings.Contains(errMsg, "quota exceeded")
 }
 
 func (p *Pool) Read(filePath string, offset int64, size int) ([]byte, error) {

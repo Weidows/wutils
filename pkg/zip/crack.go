@@ -1,14 +1,35 @@
 package zip
 
 import (
+	"archive/tar"
+	"compress/bzip2"
+	"compress/gzip"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/bodgit/sevenzip"
+	"github.com/nwaples/rardecode/v2"
 	"github.com/yeka/zip"
+)
+
+type archiveType string
+
+const (
+	archiveTypeUnknown archiveType = "unknown"
+	archiveTypeZip     archiveType = "zip"
+	archiveType7z      archiveType = "7z"
+	archiveTypeRAR     archiveType = "rar"
+	archiveTypeTarGz   archiveType = "tar.gz"
+	archiveTypeTarBz2  archiveType = "tar.bz2"
+)
+
+var (
+	reSplit7z = regexp.MustCompile(`(?i)^(.*\.7z)\.(\d{3})$`)
+	reZipVol  = regexp.MustCompile(`(?i)^\.z\d{2}$`)
 )
 
 // Archive represents a password-protected archive
@@ -28,20 +49,27 @@ func NewArchive(archivePath, password string) *Archive {
 // TryUnzip verifies if the password is correct without extracting files
 // Returns true if successful, false otherwise
 func (a *Archive) TryUnzip() bool {
-	ext := strings.ToLower(filepath.Ext(a.archivePath))
+	archivePath := ResolveArchivePath(a.archivePath)
+	typeName := detectArchiveType(archivePath)
 
-	switch ext {
-	case ".zip":
-		return a.tryUnzipZip()
-	case ".7z":
-		return a.tryUnzip7z()
+	switch typeName {
+	case archiveTypeZip:
+		return a.tryUnzipZip(archivePath)
+	case archiveType7z:
+		return a.tryUnzip7z(archivePath)
+	case archiveTypeRAR:
+		return a.tryUnzipRAR(archivePath)
+	case archiveTypeTarGz:
+		return a.tryUnzipTarGz(archivePath)
+	case archiveTypeTarBz2:
+		return a.tryUnzipTarBz2(archivePath)
 	default:
 		return false
 	}
 }
 
-func (a *Archive) tryUnzipZip() bool {
-	r, err := zip.OpenReader(a.archivePath)
+func (a *Archive) tryUnzipZip(archivePath string) bool {
+	r, err := zip.OpenReader(archivePath)
 	if err != nil {
 		return false
 	}
@@ -76,13 +104,13 @@ func (a *Archive) tryUnzipZip() bool {
 	return true
 }
 
-func (a *Archive) tryUnzip7z() bool {
+func (a *Archive) tryUnzip7z(archivePath string) bool {
 	// Check if file exists first
-	if _, err := os.Stat(a.archivePath); os.IsNotExist(err) {
+	if _, err := os.Stat(archivePath); os.IsNotExist(err) {
 		return false
 	}
 
-	r, err := sevenzip.OpenReader(a.archivePath)
+	r, err := sevenzip.OpenReader(archivePath)
 	if err != nil {
 		return false
 	}
@@ -112,22 +140,105 @@ func (a *Archive) tryUnzip7z() bool {
 	return true
 }
 
-// Unzip extracts the archive to the specified directory
-func (a *Archive) Unzip(dest string) error {
-	ext := strings.ToLower(filepath.Ext(a.archivePath))
+func (a *Archive) tryUnzipRAR(archivePath string) bool {
+	r, err := rardecode.OpenReader(archivePath, rardecode.Password(a.password))
+	if err != nil {
+		return false
+	}
+	defer r.Close()
 
-	switch ext {
-	case ".zip":
-		return a.unzipZip(dest)
-	case ".7z":
-		return a.unzip7z(dest)
-	default:
-		return fmt.Errorf("unsupported archive format: %s", ext)
+	for {
+		_, err := r.Next()
+		if err == io.EOF {
+			return true
+		}
+		if err != nil {
+			return false
+		}
+
+		buf := make([]byte, 32)
+		n, readErr := r.Read(buf)
+		if readErr != nil && readErr != io.EOF {
+			return false
+		}
+		if n > 0 || readErr == io.EOF {
+			return true
+		}
 	}
 }
 
-func (a *Archive) unzipZip(dest string) error {
-	r, err := zip.OpenReader(a.archivePath)
+func (a *Archive) tryUnzipTarGz(archivePath string) bool {
+	f, err := os.Open(archivePath)
+	if err != nil {
+		return false
+	}
+	defer f.Close()
+
+	gzr, err := gzip.NewReader(f)
+	if err != nil {
+		return false
+	}
+	defer gzr.Close()
+
+	return a.tryReadTarStream(gzr)
+}
+
+func (a *Archive) tryUnzipTarBz2(archivePath string) bool {
+	f, err := os.Open(archivePath)
+	if err != nil {
+		return false
+	}
+	defer f.Close()
+
+	bzr := bzip2.NewReader(f)
+	return a.tryReadTarStream(bzr)
+}
+
+func (a *Archive) tryReadTarStream(r io.Reader) bool {
+	tr := tar.NewReader(r)
+	for {
+		_, err := tr.Next()
+		if err == io.EOF {
+			return true
+		}
+		if err != nil {
+			return false
+		}
+
+		buf := make([]byte, 32)
+		n, readErr := tr.Read(buf)
+		if readErr != nil && readErr != io.EOF {
+			return false
+		}
+		if n > 0 || readErr == io.EOF {
+			return true
+		}
+	}
+}
+
+// Unzip extracts the archive to the specified directory
+func (a *Archive) Unzip(dest string) error {
+	archivePath := ResolveArchivePath(a.archivePath)
+	typeName := detectArchiveType(archivePath)
+
+	switch typeName {
+	case archiveTypeZip:
+		return a.unzipZip(archivePath, dest)
+	case archiveType7z:
+		return a.unzip7z(archivePath, dest)
+	case archiveTypeRAR:
+		return a.unzipRAR(archivePath, dest)
+	case archiveTypeTarGz:
+		return a.unzipTarGz(archivePath, dest)
+	case archiveTypeTarBz2:
+		return a.unzipTarBz2(archivePath, dest)
+	default:
+		return fmt.Errorf("unsupported archive format: %s", archivePath)
+	}
+}
+
+func (a *Archive) unzipZip(archivePath, dest string) error {
+	r, err := zip.OpenReader(archivePath)
 	if err != nil {
 		return err
 	}
@@ -229,8 +340,8 @@ func (a *Archive) isGarbageContent(content []byte) bool {
 	return false
 }
 
-func (a *Archive) unzip7z(dest string) error {
-	r, err := sevenzip.OpenReader(a.archivePath)
+func (a *Archive) unzip7z(archivePath, dest string) error {
+	r, err := sevenzip.OpenReader(archivePath)
 	if err != nil {
 		return err
 	}
@@ -272,4 +383,157 @@ func (a *Archive) unzip7z(dest string) error {
 	}
 
 	return nil
+}
+
+func (a *Archive) unzipRAR(archivePath, dest string) error {
+	r, err := rardecode.OpenReader(archivePath, rardecode.Password(a.password))
+	if err != nil {
+		return err
+	}
+	defer r.Close()
+
+	for {
+		hdr, err := r.Next()
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+
+		path := filepath.Join(dest, hdr.Name)
+		if !strings.HasPrefix(filepath.Clean(path), filepath.Clean(dest)+string(os.PathSeparator)) {
+			return fmt.Errorf("illegal file path: %s", hdr.Name)
+		}
+
+		if hdr.IsDir {
+			if err := os.MkdirAll(path, hdr.Mode()); err != nil {
+				return err
+			}
+			continue
+		}
+
+		if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+			return err
+		}
+
+		outFile, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, hdr.Mode())
+		if err != nil {
+			return err
+		}
+
+		_, err = io.Copy(outFile, r)
+		closeErr := outFile.Close()
+		if err != nil {
+			return err
+		}
+		if closeErr != nil {
+			return closeErr
+		}
+	}
+}
+
+func (a *Archive) unzipTarGz(archivePath, dest string) error {
+	f, err := os.Open(archivePath)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	gzr, err := gzip.NewReader(f)
+	if err != nil {
+		return err
+	}
+	defer gzr.Close()
+
+	return unzipTarStream(gzr, dest)
+}
+
+func (a *Archive) unzipTarBz2(archivePath, dest string) error {
+	f, err := os.Open(archivePath)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	bzr := bzip2.NewReader(f)
+	return unzipTarStream(bzr, dest)
+}
+
+func unzipTarStream(r io.Reader, dest string) error {
+	tr := tar.NewReader(r)
+	for {
+		hdr, err := tr.Next()
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+
+		path := filepath.Join(dest, hdr.Name)
+		if !strings.HasPrefix(filepath.Clean(path), filepath.Clean(dest)+string(os.PathSeparator)) {
+			return fmt.Errorf("illegal file path: %s", hdr.Name)
+		}
+
+		switch hdr.Typeflag {
+		case tar.TypeDir:
+			if err := os.MkdirAll(path, os.FileMode(hdr.Mode)); err != nil {
+				return err
+			}
+		case tar.TypeReg, tar.TypeRegA:
+			if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+				return err
+			}
+
+			outFile, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, os.FileMode(hdr.Mode))
+			if err != nil {
+				return err
+			}
+
+			_, err = io.Copy(outFile, tr)
+			closeErr := outFile.Close()
+			if err != nil {
+				return err
+			}
+			if closeErr != nil {
+				return closeErr
+			}
+		}
+	}
+}
+
+func ResolveArchivePath(archivePath string) string {
+	lowerPath := strings.ToLower(archivePath)
+
+	if matches := reSplit7z.FindStringSubmatch(lowerPath); len(matches) == 3 {
+		baseWith7z := archivePath[:len(matches[1])]
+		return baseWith7z + ".001"
+	}
+
+	ext := strings.ToLower(filepath.Ext(archivePath))
+	if reZipVol.MatchString(ext) {
+		return strings.TrimSuffix(archivePath, filepath.Ext(archivePath)) + ".zip"
+	}
+
+	return archivePath
+}
+
+func detectArchiveType(archivePath string) archiveType {
+	lowerPath := strings.ToLower(archivePath)
+
+	switch {
+	case strings.HasSuffix(lowerPath, ".tar.gz"):
+		return archiveTypeTarGz
+	case strings.HasSuffix(lowerPath, ".tar.bz2"):
+		return archiveTypeTarBz2
+	case strings.HasSuffix(lowerPath, ".zip"):
+		return archiveTypeZip
+	case strings.HasSuffix(lowerPath, ".7z") || reSplit7z.MatchString(lowerPath):
+		return archiveType7z
+	case strings.HasSuffix(lowerPath, ".rar"):
+		return archiveTypeRAR
+	default:
+		return archiveTypeUnknown
+	}
 }

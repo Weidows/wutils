@@ -95,6 +95,8 @@ func parsePasswords(content string) []string {
 }
 
 func crackWithWorkers(archivePath string, passwords []string, maxWorkers int) string {
+	archivePath = zip.ResolveArchivePath(archivePath)
+
 	var wg sync.WaitGroup
 	pool := make(chan struct{}, maxWorkers)
 	success := make(chan string, 1)
