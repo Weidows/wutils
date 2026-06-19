@@ -405,3 +405,69 @@ cmd:
 ## 借物表
 
 暂无.
+
+---
+
+## 新架构 (v0.2+)
+
+### 项目结构
+
+项目已从单一 CLI 重构为 CLI + GUI 双接口架构:
+
+```
+wutils/
+├── cmd/
+│   ├── wutils/main.go              # CLI 入口 (6 行薄壳)
+│   └── wutils-gui/                 # Wails GUI 应用 (系统托盘)
+│       ├── main.go                 # GUI 入口
+│       ├── app.go                  # Go↔JS 服务绑定
+│       ├── tray.go                 # 系统托盘菜单
+│       └── frontend/               # React + Tailwind UI
+├── internal/
+│   ├── app/                        # Service 抽象 + Registry
+│   ├── cli/commands.go             # CLI 命令定义 (调 service 层)
+│   ├── config/                     # 配置管理 (Load/Save/Watcher)
+│   └── service/                    # 8 个服务实现
+│       ├── dsg.go / ol.go / buffer.go    # 常驻服务
+│       └── diff.go / zipcrack.go / ...   # 一次性服务
+├── pkg/zip/                        # 压缩包破解库
+└── utils/                          # 工具函数
+```
+
+### 开发
+
+```bash
+# CLI (终端)
+cd cmd/wutils && go run . --help
+
+# GUI (需要图形环境 + Wails CLI)
+cd cmd/wutils-gui && wails dev
+
+# 前端热重载
+cd cmd/wutils-gui/frontend && pnpm run dev
+
+# 构建
+cd cmd/wutils && go build -o wutils.exe .
+cd cmd/wutils-gui && wails build
+
+# 测试
+go test ./...
+```
+
+### GUI 功能
+
+GUI 以系统托盘形式运行 (Windows), 包含 9 个页面:
+
+| 页面 | 功能 | 状态 |
+|------|------|------|
+| Dashboard | 服务总览, 一键启停 | ✅ |
+| DSG | 磁盘睡眠守护控制 | ✅ |
+| OL | 窗口透明度监听 | ✅ |
+| Buffer | IO 缓冲文件系统 | ✅ |
+| ZipCrack | 压缩包密码破解 | ✅ |
+| Diff | 文件行差集对比 | ✅ |
+| Media | 媒体文件聚类分组 | ✅ |
+| GMM | Go 模块代理管理 | ✅ |
+| Config | YAML 配置编辑 | ✅ |
+
+托盘菜单: Show/Hide, Start All/Stop All, Dashboard, Quit. 点击关闭按钮隐藏到托盘而非退出。
