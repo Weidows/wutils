@@ -6,37 +6,47 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Weidows/wutils/internal/config"
 	"github.com/Weidows/wutils/utils/collection"
 	"github.com/Weidows/wutils/utils/grammar"
 	os2 "github.com/Weidows/wutils/utils/os"
-	"github.com/jinzhu/configor"
 	"github.com/sirupsen/logrus"
 )
 
 // Scope 定义了配置和日志记录器的结构体
 type Scope struct {
 	Logger     *logrus.Logger
-	Config     Config
+	Config     *config.Config
 	ConfigPath string
+	watcher    *config.Watcher
 }
 
 // NewKeepRunner 初始化 Scope 实例
 func NewKeepRunner(logger *logrus.Logger, configPath string) *Scope {
-	s := &Scope{Logger: logger, ConfigPath: configPath}
-	go s.init()
-	time.Sleep(time.Millisecond * 50)
+	s := &Scope{
+		Logger:     logger,
+		ConfigPath: configPath,
+		Config:     loadConfig(configPath),
+	}
+
+	// Start hot-reload watcher
+	interval := time.Duration(s.Config.Refresh) * time.Second
+	if interval < time.Second {
+		interval = time.Second
+	}
+	s.watcher = config.NewWatcher(configPath, interval)
+	s.watcher.Start()
+
 	return s
 }
 
-// init 加载配置文件并定期刷新
-func (s *Scope) init() {
-	for {
-		_ = configor.Load(&s.Config, s.ConfigPath)
-		if s.Config.Refresh < 1 {
-			s.Config.Refresh = 1
-		}
-		time.Sleep(time.Second * time.Duration(s.Config.Refresh))
+func loadConfig(path string) *config.Config {
+	cfg, err := config.Load(path)
+	if err != nil {
+		cfg := config.DefaultConfig()
+		return &cfg
 	}
+	return cfg
 }
 
 // Dsg 执行 DSG 任务
@@ -71,10 +81,7 @@ func (s *Scope) Ol() {
 			IgnoreInvisible: true,
 		})
 		collection.ForEach(windows, func(i int, window *os2.EnumWindowsResult) {
-			collection.ForEach(s.Config.Cmd.Ol.Patterns, func(ii int, pattern struct {
-				Title   string
-				Opacity byte
-			}) {
+			collection.ForEach(s.Config.Cmd.Ol.Patterns, func(ii int, pattern config.OLPattern) {
 				if grammar.Match(pattern.Title, window.Title) && pattern.Opacity != window.Opacity {
 					isSuccess := os2.SetWindowOpacity(window.Handle, pattern.Opacity)
 					if s.Config.App.Debug {
@@ -93,7 +100,6 @@ func (s *Scope) OlList() {
 		IgnoreNoTitled:  true,
 		IgnoreInvisible: true,
 	}), func(i int, v *os2.EnumWindowsResult) {
-		// s.Logger.Println(fmt.Sprintf("%+v", v))
 		fmt.Println(fmt.Sprintf("%+v", v))
 	})
 }

@@ -12,6 +12,7 @@ import (
 	"github.com/Weidows/wutils/cmd/wutils/media"
 	"github.com/Weidows/wutils/cmd/wutils/runner"
 	"github.com/Weidows/wutils/cmd/wutils/zip"
+	"github.com/Weidows/wutils/internal/config"
 	logutil "github.com/Weidows/wutils/utils/log"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/yaml.v3"
@@ -43,18 +44,8 @@ var (
 			if configPath == "" {
 				home, _ := os.UserHomeDir()
 				configPath = filepath.Join(home, ".config", "wutils", "app.yml")
-				if _, err := os.Stat(configPath); os.IsNotExist(err) {
-					templateData, err := runner.ConfigTemplate()
-					if err != nil {
-						return err
-					}
-					if err := os.MkdirAll(filepath.Dir(configPath), 0755); err != nil {
-						return err
-					}
-					err = os.WriteFile(configPath, templateData, 0644)
-					if err != nil {
-						return err
-					}
+				if err := config.EnsureUserConfig(configPath); err != nil {
+					return fmt.Errorf("failed to ensure config: %w", err)
 				}
 			}
 			kr = runner.NewKeepRunner(logger, configPath)
@@ -83,40 +74,33 @@ var (
 						Name:  "update",
 						Usage: "merge template config with user config, adding new fields while preserving user values",
 						Action: func(cCtx *cli.Context) error {
-							// Get template from executable directory
-							templateData, err := runner.ConfigTemplate()
+							templateData, err := config.Template()
 							if err != nil {
 								return fmt.Errorf("failed to read template config: %v", err)
 							}
 
-							// Parse template as yaml.Node (preserves comments)
 							var templateNode yaml.Node
 							if err := yaml.Unmarshal(templateData, &templateNode); err != nil {
 								return fmt.Errorf("failed to parse template: %v", err)
 							}
 
-							// Read user config
 							userConfigData, err := os.ReadFile(configPath)
 							if err != nil {
 								return fmt.Errorf("failed to read user config: %v", err)
 							}
 
-							// Parse user config as yaml.Node (preserves comments)
 							var userNode yaml.Node
 							if err := yaml.Unmarshal(userConfigData, &userNode); err != nil {
 								return fmt.Errorf("failed to parse user config: %v", err)
 							}
 
-							// Merge template with user config
-							mergedNode := mergeYamlNodes(&templateNode, &userNode)
+							mergedNode := config.MergeYAMLNodes(&templateNode, &userNode)
 
-							// Encode merged result back to YAML
 							mergedData, err := yaml.Marshal(mergedNode)
 							if err != nil {
 								return fmt.Errorf("failed to encode merged config: %v", err)
 							}
 
-							// Write merged config back to user config file
 							if err := os.WriteFile(configPath, mergedData, 0644); err != nil {
 								return fmt.Errorf("failed to write merged config: %v", err)
 							}
@@ -136,7 +120,6 @@ var (
 					"输入为两个特定名称的文件: './inputA.txt', './inputB.txt'",
 				Action: func(cCtx *cli.Context) (err error) {
 					missInA, missInB := diff.CheckLinesDiff("./inputA.txt", "./inputB.txt")
-					// 输出结果
 					fmt.Println("================== Missing in A ==================")
 					for _, file := range missInA {
 						fmt.Println(file)
@@ -358,10 +341,9 @@ var (
 								return fmt.Errorf("please provide drive letter (e.g., X:)")
 							}
 
-							// Get config from runner's Config.Cmd.Buffer
 							cfg := kr.Config.Cmd.Buffer
 
-							config := &buffer.BufferConfig{
+							bufCfg := &buffer.BufferConfig{
 								SourcePath:        cCtx.String("source"),
 								MemoryLimit:       cCtx.Int64("memory-limit"),
 								FlushInterval:     cCtx.Int64("flush-interval"),
@@ -370,19 +352,18 @@ var (
 								EnableWriteBuffer: cCtx.Bool("enable-write-buffer"),
 							}
 
-							// Override with config file settings if not explicitly provided
-							if config.MemoryLimit == 67108864 && cfg.MemoryLimit > 0 {
-								config.MemoryLimit = cfg.MemoryLimit
+							if bufCfg.MemoryLimit == 67108864 && cfg.MemoryLimit > 0 {
+								bufCfg.MemoryLimit = cfg.MemoryLimit
 							}
-							if config.FlushInterval == 10 && cfg.FlushInterval > 0 {
-								config.FlushInterval = int64(cfg.FlushInterval)
+							if bufCfg.FlushInterval == 10 && cfg.FlushInterval > 0 {
+								bufCfg.FlushInterval = int64(cfg.FlushInterval)
 							}
-							if config.Strategy == "balanced" && cfg.Strategy != "" {
-								config.Strategy = cfg.Strategy
+							if bufCfg.Strategy == "balanced" && cfg.Strategy != "" {
+								bufCfg.Strategy = cfg.Strategy
 							}
 
-							fmt.Printf("Mounting buffer drive %s from %s...\n", drive, config.SourcePath)
-							if err := buffer.Mount(drive, config); err != nil {
+							fmt.Printf("Mounting buffer drive %s from %s...\n", drive, bufCfg.SourcePath)
+							if err := buffer.Mount(drive, bufCfg); err != nil {
 								return fmt.Errorf("failed to mount buffer: %v", err)
 							}
 							fmt.Printf("Buffer drive %s mounted successfully\n", drive)
@@ -418,69 +399,6 @@ var (
 		},
 	}
 )
-
-func mergeYamlNodes(template, user *yaml.Node) *yaml.Node {
-	if template == nil {
-		return user
-	}
-	if user == nil {
-		return template
-	}
-
-	result := *template
-
-	if template.Kind == yaml.MappingNode && user.Kind == yaml.MappingNode {
-		templateMap := nodeToMap(template)
-		userMap := nodeToMap(user)
-
-		mergedContent := make([]*yaml.Node, 0)
-
-		for i := 0; i < len(template.Content); i += 2 {
-			key := template.Content[i]
-			templateValue := template.Content[i+1]
-
-			keyStr := key.Value
-			if userValue, exists := userMap[keyStr]; exists {
-				mergedContent = append(mergedContent, key)
-				mergedContent = append(mergedContent, mergeYamlNodes(templateValue, userValue))
-			} else {
-				mergedContent = append(mergedContent, key)
-				mergedContent = append(mergedContent, templateValue)
-			}
-		}
-
-		for i := 0; i < len(user.Content); i += 2 {
-			key := user.Content[i]
-			keyStr := key.Value
-			if _, exists := templateMap[keyStr]; !exists {
-				mergedContent = append(mergedContent, key)
-				mergedContent = append(mergedContent, user.Content[i+1])
-			}
-		}
-
-		result.Content = mergedContent
-	} else if user.Kind != 0 {
-		return user
-	}
-
-	return &result
-}
-
-func nodeToMap(node *yaml.Node) map[string]*yaml.Node {
-	result := make(map[string]*yaml.Node)
-	if node.Kind != yaml.MappingNode {
-		return result
-	}
-
-	for i := 0; i < len(node.Content); i += 2 {
-		key := node.Content[i]
-		value := node.Content[i+1]
-		if key.Kind == yaml.ScalarNode && key.Value != "" {
-			result[key.Value] = value
-		}
-	}
-	return result
-}
 
 func main() {
 	if err := app.Run(os.Args); err != nil {
