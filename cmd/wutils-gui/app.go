@@ -8,6 +8,7 @@ import (
 	"github.com/Weidows/wutils/internal/app"
 	"github.com/Weidows/wutils/internal/config"
 	"github.com/Weidows/wutils/internal/service"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct
@@ -63,9 +64,16 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-// shutdown is called when the app is closing.
+// shutdown cleans up all services.
 func (a *App) shutdown(ctx context.Context) {
 	a.registry.StopAll()
+}
+
+// beforeClose intercepts the window close button — hides to tray instead of quitting.
+// Returns true to prevent close, false to allow it.
+func (a *App) beforeClose(ctx context.Context) bool {
+	runtime.WindowHide(ctx)
+	return true // prevent close, just hide
 }
 
 // ============ Service Registry (for Dashboard) ============
