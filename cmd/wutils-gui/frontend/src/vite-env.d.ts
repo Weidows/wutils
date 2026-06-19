@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-// Wails runtime is injected by the Go backend
+// Wails runtime injected by the Go backend
 declare global {
   interface Window {
     go: {
@@ -28,6 +28,14 @@ declare global {
           Now(): Promise<string>;
         };
       };
+    };
+    runtime?: {
+      EventsOn(event: string, callback: (...args: any[]) => void): () => void;
+      EventsEmit(event: string, ...args: any[]): void;
+      WindowShow(): void;
+      WindowHide(): void;
+      WindowCenter(): void;
+      Quit(): void;
     };
   }
 }
