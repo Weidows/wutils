@@ -10,7 +10,7 @@ import (
 	"github.com/Weidows/wutils/internal/i18n"
 	"github.com/Weidows/wutils/utils/collection"
 	"github.com/Weidows/wutils/utils/grammar"
-	os2 "github.com/Weidows/wutils/utils/os"
+	os2 "github.com/Weidows/wutils/utils/winapi"
 	"github.com/sirupsen/logrus"
 )
 
