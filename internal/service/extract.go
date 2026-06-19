@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/Weidows/wutils/cmd/wutils/extract"
 	"github.com/Weidows/wutils/internal/app"
+	"github.com/Weidows/wutils/internal/i18n"
 )
 
 // ExtractService flattens subdirectories by moving their contents to the parent directory.
@@ -14,7 +15,7 @@ func NewExtractService() *ExtractService {
 }
 
 func (s *ExtractService) Name() string        { return "extract" }
-func (s *ExtractService) Description() string { return "子目录解散 — 将子目录内容提取到父目录" }
+func (s *ExtractService) Description() string { return i18n.G("extract.description") }
 func (s *ExtractService) Status() app.ServiceStatus { return app.StatusStopped }
 func (s *ExtractService) Start() error               { return nil }
 func (s *ExtractService) Stop() error                { return nil }

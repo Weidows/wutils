@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/Weidows/wutils/cmd/wutils/diff"
 	"github.com/Weidows/wutils/internal/app"
+	"github.com/Weidows/wutils/internal/i18n"
 )
 
 // DiffService compares two files and returns the line differences.
@@ -14,7 +15,7 @@ func NewDiffService() *DiffService {
 }
 
 func (s *DiffService) Name() string        { return "diff" }
-func (s *DiffService) Description() string { return "文件对比 — 计算两个文件的行差集" }
+func (s *DiffService) Description() string { return i18n.G("diff.description") }
 func (s *DiffService) Status() app.ServiceStatus { return app.StatusStopped }
 func (s *DiffService) Start() error               { return nil }
 func (s *DiffService) Stop() error                { return nil }

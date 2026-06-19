@@ -3,6 +3,8 @@ package config
 // DefaultConfig returns a Config populated with sensible defaults.
 func DefaultConfig() Config {
 	return Config{
+		ConfigVersion: CurrentConfigVersion,
+		Locale:        "auto",
 		App: AppConfig{
 			Name:    "wutils",
 			Version: "1.0.0",

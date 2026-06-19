@@ -10,6 +10,7 @@ import (
 
 	"github.com/Weidows/wutils/internal/app"
 	"github.com/Weidows/wutils/internal/config"
+	"github.com/Weidows/wutils/internal/i18n"
 	"github.com/Weidows/wutils/utils/collection"
 	"github.com/sirupsen/logrus"
 )
@@ -38,7 +39,7 @@ func NewDSGService(cfg config.ConfigProvider, logger *logrus.Logger) *DSGService
 }
 
 func (s *DSGService) Name() string        { return "dsg" }
-func (s *DSGService) Description() string { return "Disk Sleep Guard — 防止硬盘睡眠" }
+func (s *DSGService) Description() string { return i18n.G("dsg.description") }
 
 func (s *DSGService) Status() app.ServiceStatus {
 	s.mu.Lock()

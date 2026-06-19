@@ -107,9 +107,18 @@ func (w *Watcher) reload() {
 		return
 	}
 	base.Merge(&fileCfg)
+	RunMigrations(&base)
 	if err := base.Validate(); err != nil {
 		return
 	}
+
+	// Save back if upgraded
+	if base.ConfigVersion > fileCfg.ConfigVersion {
+		if err := Save(&base, w.path); err != nil {
+			// Non-fatal
+		}
+	}
+
 	w.mu.Lock()
 	w.cfg = &base
 	w.mu.Unlock()

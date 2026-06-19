@@ -1,0 +1,92 @@
+# wutils 中文翻译
+app:
+  name: "wutils"
+  description: "Weidows 工具箱"
+  version: "版本"
+
+dsg:
+  name: "磁盘睡眠守护"
+  description: "防止硬盘休眠"
+  writing_to: "正在写入时间戳到 %s"
+  no_disks: "未配置磁盘"
+  started: "DSG 已启动"
+  stopped: "DSG 已停止"
+
+ol:
+  name: "透明度监听器"
+  description: "自动控制窗口透明度"
+  scanning: "正在扫描窗口..."
+  started: "OL 已启动"
+  stopped: "OL 已停止"
+  visible_windows: "可见窗口 (%d)"
+
+buffer:
+  name: "缓冲文件系统"
+  description: "基于 Dokan 的 IO 缓冲虚拟文件系统"
+  mounted: "缓冲盘 %s 已挂载"
+  unmounted: "缓冲盘已卸载"
+  already_mounted: "已经挂载"
+  mounting: "正在挂载缓冲盘 %s，源路径: %s..."
+
+diff:
+  name: "文件对比"
+  description: "计算两个文件的行差集"
+  missing_in_a: "A 缺少 (%d)"
+  missing_in_b: "B 缺少 (%d)"
+
+zip:
+  name: "压缩包破解"
+  description: "破解加密压缩包密码"
+  password_found: "密码已找到: %s"
+  password_not_found: "未找到密码"
+  cracking: "正在破解..."
+
+media:
+  name: "媒体聚类器"
+  description: "按时间和位置对照片/视频分组"
+  clustering: "正在聚类媒体文件: %s"
+  done: "媒体文件分组完成"
+
+extract:
+  name: "子目录解散"
+  description: "将子目录内容提取到父目录"
+
+gmm:
+  name: "Go 代理管理"
+  description: "管理 GOPROXY 和 GOSUMDB 镜像"
+  proxy: "GOPROXY"
+  sumdb: "GOSUMDB"
+  set_proxy: "GOPROXY → %s"
+  set_sumdb: "GOSUMDB → %s"
+
+config:
+  title: "配置"
+  file: "配置文件"
+  updated: "配置已更新"
+  save: "保存"
+  reset: "恢复默认"
+
+cmd:
+  diff: "diff — 文件行差集对比"
+  parallel: "并行执行后台任务"
+  dsg: "磁盘睡眠守护 — 定时写入时间戳防止硬盘休眠"
+  ol: "透明度监听器 — 自动匹配规则设置窗口透明度"
+  zip: "压缩文件操作"
+  media: "媒体文件操作"
+  extract: "解散一级目录 — 将子目录内容提取到父目录"
+  gmm: "Go 代理管理 — 测试和切换模块镜像"
+  buffer: "IO 缓冲虚拟文件系统 (基于 Dokan)"
+
+gui:
+  dashboard: "仪表盘"
+  running: "%d/%d 运行中"
+  start_all: "全部启动"
+  stop_all: "全部停止"
+  start: "启动"
+  stop: "停止"
+  status: "状态"
+  coming_soon: "敬请期待..."
+  tray_show: "显示窗口"
+  tray_hide: "隐藏窗口"
+  tray_dashboard: "打开仪表盘"
+  tray_quit: "退出"

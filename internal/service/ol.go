@@ -7,6 +7,7 @@ import (
 
 	"github.com/Weidows/wutils/internal/app"
 	"github.com/Weidows/wutils/internal/config"
+	"github.com/Weidows/wutils/internal/i18n"
 	"github.com/Weidows/wutils/utils/collection"
 	"github.com/Weidows/wutils/utils/grammar"
 	os2 "github.com/Weidows/wutils/utils/os"
@@ -36,7 +37,7 @@ func NewOLService(cfg config.ConfigProvider, logger *logrus.Logger) *OLService {
 }
 
 func (s *OLService) Name() string        { return "ol" }
-func (s *OLService) Description() string { return "Opacity Listener — 窗口透明度控制" }
+func (s *OLService) Description() string { return i18n.G("ol.description") }
 
 func (s *OLService) Status() app.ServiceStatus {
 	s.mu.Lock()

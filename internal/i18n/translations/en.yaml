@@ -1,0 +1,92 @@
+# wutils English translations
+app:
+  name: "wutils"
+  description: "Weidows Utilities"
+  version: "Version"
+
+dsg:
+  name: "Disk Sleep Guard"
+  description: "Prevent hard drives from sleeping"
+  writing_to: "Writing timestamp to %s"
+  no_disks: "No disks configured"
+  started: "DSG started"
+  stopped: "DSG stopped"
+
+ol:
+  name: "Opacity Listener"
+  description: "Auto-transparency for windows"
+  scanning: "Scanning windows..."
+  started: "OL started"
+  stopped: "OL stopped"
+  visible_windows: "Visible Windows (%d)"
+
+buffer:
+  name: "Buffer Filesystem"
+  description: "IO buffer virtual filesystem (Dokan)"
+  mounted: "Buffer mounted on %s"
+  unmounted: "Buffer unmounted"
+  already_mounted: "Already mounted"
+  mounting: "Mounting buffer drive %s from %s..."
+
+diff:
+  name: "File Diff"
+  description: "Compare line differences between two files"
+  missing_in_a: "Missing in A (%d)"
+  missing_in_b: "Missing in B (%d)"
+
+zip:
+  name: "Zip Cracker"
+  description: "Crack encrypted archive passwords"
+  password_found: "Password found: %s"
+  password_not_found: "Password not found"
+  cracking: "Cracking..."
+
+media:
+  name: "Media Grouper"
+  description: "Group photos/videos by time and GPS"
+  clustering: "Clustering media files in %s"
+  done: "Media clustering complete"
+
+extract:
+  name: "Subdir Extractor"
+  description: "Flatten nested directory structures"
+
+gmm:
+  name: "Go Mirror Manager"
+  description: "Manage GOPROXY and GOSUMDB mirrors"
+  proxy: "GOPROXY"
+  sumdb: "GOSUMDB"
+  set_proxy: "GOPROXY → %s"
+  set_sumdb: "GOSUMDB → %s"
+
+config:
+  title: "Configuration"
+  file: "Config file"
+  updated: "Config updated"
+  save: "Save"
+  reset: "Reset to Defaults"
+
+cmd:
+  diff: "diff — Compare line differences between two files"
+  parallel: "Run parallel background tasks"
+  dsg: "Disk Sleep Guard — Prevent hard drives from sleeping by periodic writes"
+  ol: "Opacity Listener — Auto transparency for windows matching rules"
+  zip: "Archive operations"
+  media: "Media file operations"
+  extract: "Flatten directories — extract subdirectory contents to parent"
+  gmm: "Go Mirror Manager — Test and switch module proxies"
+  buffer: "IO buffer filesystem (based on Dokan)"
+
+gui:
+  dashboard: "Dashboard"
+  running: "%d/%d running"
+  start_all: "Start All"
+  stop_all: "Stop All"
+  start: "Start"
+  stop: "Stop"
+  status: "Status"
+  coming_soon: "Coming soon..."
+  tray_show: "Show Window"
+  tray_hide: "Hide Window"
+  tray_dashboard: "Open Dashboard"
+  tray_quit: "Quit"

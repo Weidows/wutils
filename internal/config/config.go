@@ -2,10 +2,15 @@
 //
 // Architecture
 //
-// Config has three layers, each overriding the previous:.
+// Config has three layers, each overriding the previous:
 //  1. Compiled-in defaults (DefaultConfig)
 //  2. User config file (~/.config/wutils/app.yml)
 //  3. Runtime overrides (CLI flags / GUI inputs)
+//
+// Version management:
+//   - ConfigVersion tracks the schema version of the config file.
+//   - When loading, if ConfigVersion < CurrentConfigVersion, migrations run.
+//   - Saved configs always have the latest version.
 //
 // The Watcher provides hot-reload via polling and implements ConfigProvider
 // so that long-running services can pick up config changes at runtime.
@@ -13,6 +18,35 @@
 package config
 
 import "fmt"
+
+// CurrentConfigVersion is the latest config schema version.
+// Increment when making backward-incompatible changes to the Config struct.
+const CurrentConfigVersion = 1
+
+// migration describes how to upgrade config from one version to the next.
+type migration struct {
+	from    int
+	to      int
+	migrate func(*Config)
+}
+
+var migrations = []migration{
+	// 0 → 1: Initial version tracking. Sets ConfigVersion and ensures fields have defaults.
+	{from: 0, to: 1, migrate: migrateV0ToV1},
+}
+
+func migrateV0ToV1(cfg *Config) {
+	cfg.ConfigVersion = 1
+}
+
+// RunMigrations upgrades a config to the latest version.
+func RunMigrations(cfg *Config) {
+	for _, m := range migrations {
+		if cfg.ConfigVersion == m.from {
+			m.migrate(cfg)
+		}
+	}
+}
 
 // AppConfig holds application-level settings.
 type AppConfig struct {
@@ -64,6 +98,14 @@ type CmdConfig struct {
 
 // Config is the top-level configuration structure for wutils.
 type Config struct {
+	// ConfigVersion tracks the config file schema for migration purposes.
+	// Do not modify this field manually.
+	ConfigVersion int `yaml:"config_version,omitempty" json:"configVersion,omitempty"`
+
+	// Locale sets the display language. Supports "auto" (detect from system),
+	// "en" (English), "zh" (简体中文).
+	Locale string `yaml:"locale,omitempty" json:"locale,omitempty"`
+
 	App     AppConfig     `yaml:"app" json:"app"`
 	Logging LoggingConfig `yaml:"logging" json:"logging"`
 	Refresh int           `yaml:"refresh" json:"refresh"`
@@ -100,6 +142,12 @@ func (c *Config) Validate() error {
 func (c *Config) Merge(other *Config) {
 	if other == nil {
 		return
+	}
+	if other.ConfigVersion > 0 {
+		c.ConfigVersion = other.ConfigVersion
+	}
+	if other.Locale != "" {
+		c.Locale = other.Locale
 	}
 	if other.App.Name != "" {
 		c.App.Name = other.App.Name

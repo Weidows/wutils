@@ -29,8 +29,18 @@ func Load(path string) (*Config, error) {
 	}
 	cfg.Merge(&fileCfg)
 
+	// Run migrations if the config is from an older version
+	RunMigrations(&cfg)
+
 	if err := cfg.Validate(); err != nil {
 		return nil, fmt.Errorf("invalid config: %w", err)
+	}
+
+	// Save back if migration ran (upgrades the file)
+	if cfg.ConfigVersion > fileCfg.ConfigVersion {
+		if err := Save(&cfg, path); err != nil {
+			// Non-fatal: log but continue
+		}
 	}
 
 	return &cfg, nil

@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/Weidows/wutils/cmd/wutils/media"
 	"github.com/Weidows/wutils/internal/app"
+	"github.com/Weidows/wutils/internal/i18n"
 )
 
 // MediaService groups photos and videos by time and GPS proximity.
@@ -14,7 +15,7 @@ func NewMediaService() *MediaService {
 }
 
 func (s *MediaService) Name() string        { return "media" }
-func (s *MediaService) Description() string { return "媒体文件聚类 — 按时间与GPS分组" }
+func (s *MediaService) Description() string { return i18n.G("media.description") }
 func (s *MediaService) Status() app.ServiceStatus { return app.StatusStopped }
 func (s *MediaService) Start() error               { return nil }
 func (s *MediaService) Stop() error                { return nil }

@@ -9,6 +9,7 @@ import (
 
 	"github.com/Weidows/wutils/cmd/wutils/buffer"
 	"github.com/Weidows/wutils/internal/config"
+	"github.com/Weidows/wutils/internal/i18n"
 	"github.com/Weidows/wutils/internal/service"
 	"github.com/Weidows/wutils/utils/log"
 	"github.com/urfave/cli/v2"
@@ -75,6 +76,9 @@ func NewApp() *cli.App {
 			if err != nil {
 				return fmt.Errorf("failed to load config: %w", err)
 			}
+
+			// Initialize i18n from config locale
+			i18n.InitGlobal(i18n.ResolveLang(cfg.Locale))
 
 			// Start config watcher for hot-reload
 			interval := cfg.Refresh

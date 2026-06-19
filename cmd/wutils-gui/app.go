@@ -7,6 +7,7 @@ import (
 
 	"github.com/Weidows/wutils/internal/app"
 	"github.com/Weidows/wutils/internal/config"
+	"github.com/Weidows/wutils/internal/i18n"
 	"github.com/Weidows/wutils/internal/service"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -70,6 +71,10 @@ func NewApp() *App {
 // startup is called when the app starts.
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+
+	// Initialize i18n from config
+	cfg := config.DefaultConfig()
+	i18n.InitGlobal(i18n.ResolveLang(cfg.Locale))
 }
 
 // shutdown cleans up all services.

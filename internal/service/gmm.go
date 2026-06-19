@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/Weidows/wutils/cmd/wutils/gmm"
 	"github.com/Weidows/wutils/internal/app"
+	"github.com/Weidows/wutils/internal/i18n"
 )
 
 // GMMService manages Go module proxy mirrors (GOPROXY, GOSUMDB).
@@ -14,7 +15,7 @@ func NewGMMService() *GMMService {
 }
 
 func (s *GMMService) Name() string        { return "gmm" }
-func (s *GMMService) Description() string { return "Go 代理管理 — 测试/切换模块镜像" }
+func (s *GMMService) Description() string { return i18n.G("gmm.description") }
 func (s *GMMService) Status() app.ServiceStatus { return app.StatusStopped }
 func (s *GMMService) Start() error               { return nil }
 func (s *GMMService) Stop() error                { return nil }

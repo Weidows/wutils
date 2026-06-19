@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/Weidows/wutils/cmd/wutils/zip"
 	"github.com/Weidows/wutils/internal/app"
+	"github.com/Weidows/wutils/internal/i18n"
 )
 
 // ZipCrackService cracks the password of encrypted archives (.zip/.7z/.rar/.tar.gz/.tar.bz2).
@@ -14,7 +15,7 @@ func NewZipCrackService() *ZipCrackService {
 }
 
 func (s *ZipCrackService) Name() string        { return "zipcrack" }
-func (s *ZipCrackService) Description() string { return "压缩包密码破解" }
+func (s *ZipCrackService) Description() string { return i18n.G("zip.description") }
 func (s *ZipCrackService) Status() app.ServiceStatus { return app.StatusStopped }
 func (s *ZipCrackService) Start() error               { return nil }
 func (s *ZipCrackService) Stop() error                { return nil }

@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/Weidows/wutils/internal/i18n"
 	"github.com/getlantern/systray"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -11,18 +12,18 @@ import (
 func (a *App) trayReady() {
 	systray.SetIcon(trayIconData)
 	systray.SetTitle("wutils")
-	systray.SetTooltip("wutils — Weidows Utilities")
+	systray.SetTooltip("wutils — " + i18n.G("app.description"))
 
 	// --- Menu items ---
-	mShow := systray.AddMenuItem("Show Window", "Show wutils window")
-	mHide := systray.AddMenuItem("Hide Window", "Hide wutils window to tray")
+	mShow := systray.AddMenuItem(i18n.G("gui.tray_show"), "Show wutils window")
+	mHide := systray.AddMenuItem(i18n.G("gui.tray_hide"), "Hide wutils window to tray")
 	systray.AddSeparator()
-	mStartAll := systray.AddMenuItem("Start All Services", "Start all background services")
-	mStopAll := systray.AddMenuItem("Stop All Services", "Stop all running services")
+	mStartAll := systray.AddMenuItem(i18n.G("gui.start_all"), "Start all background services")
+	mStopAll := systray.AddMenuItem(i18n.G("gui.stop_all"), "Stop all running services")
 	systray.AddSeparator()
-	mDashboard := systray.AddMenuItem("Open Dashboard", "Open the main dashboard")
+	mDashboard := systray.AddMenuItem(i18n.G("gui.tray_dashboard"), "Open the main dashboard")
 	systray.AddSeparator()
-	mQuit := systray.AddMenuItem("Quit", "Quit wutils")
+	mQuit := systray.AddMenuItem(i18n.G("gui.tray_quit"), "Quit wutils")
 
 	// --- Event handlers (goroutine per channel to avoid blocking) ---
 

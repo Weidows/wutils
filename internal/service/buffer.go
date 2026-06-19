@@ -6,6 +6,7 @@ import (
 
 	"github.com/Weidows/wutils/cmd/wutils/buffer"
 	"github.com/Weidows/wutils/internal/app"
+	"github.com/Weidows/wutils/internal/i18n"
 )
 
 // BufferService wraps the Dokan-based IO buffer filesystem as a service.
@@ -26,7 +27,7 @@ func NewBufferService(drive string, config *buffer.BufferConfig) *BufferService 
 }
 
 func (s *BufferService) Name() string        { return "buffer" }
-func (s *BufferService) Description() string { return "Buffer filesystem — IO 缓冲虚拟文件系统" }
+func (s *BufferService) Description() string { return i18n.G("buffer.description") }
 
 func (s *BufferService) Status() app.ServiceStatus {
 	s.mu.Lock()
