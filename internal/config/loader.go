@@ -5,22 +5,34 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/jinzhu/configor"
 	"gopkg.in/yaml.v3"
 )
 
-// Load reads a YAML config file and unmarshals it into a Config struct.
+// Load reads a YAML config file, merges with defaults, and validates.
 // If path is empty, returns DefaultConfig.
 func Load(path string) (*Config, error) {
+	cfg := DefaultConfig() // start with compiled-in defaults
+
 	if path == "" {
-		cfg := DefaultConfig()
 		return &cfg, nil
 	}
 
-	var cfg Config
-	if err := configor.Load(&cfg, path); err != nil {
-		return nil, fmt.Errorf("failed to load config from %s: %w", path, err)
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read config %s: %w", path, err)
 	}
+
+	// Overlay file values onto defaults
+	var fileCfg Config
+	if err := yaml.Unmarshal(data, &fileCfg); err != nil {
+		return nil, fmt.Errorf("failed to parse config %s: %w", path, err)
+	}
+	cfg.Merge(&fileCfg)
+
+	if err := cfg.Validate(); err != nil {
+		return nil, fmt.Errorf("invalid config: %w", err)
+	}
+
 	return &cfg, nil
 }
 
@@ -48,7 +60,7 @@ func Template() ([]byte, error) {
 }
 
 // EnsureUserConfig creates a default user config at the given path
-// if it does not already exist, using the template from the executable directory.
+// if it does not already exist.
 func EnsureUserConfig(path string) error {
 	if _, err := os.Stat(path); err == nil {
 		return nil // already exists
@@ -69,6 +81,7 @@ func EnsureUserConfig(path string) error {
 
 // MergeYAMLNodes recursively merges a template YAML node tree with a user YAML node tree.
 // User values take precedence for existing keys; new keys from template are added.
+// This preserves YAML comments in the user config.
 func MergeYAMLNodes(template, user *yaml.Node) *yaml.Node {
 	if template == nil {
 		return user

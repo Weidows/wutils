@@ -1,13 +1,23 @@
 package config
 
 import (
+	"os"
 	"sync"
 	"time"
 
-	"github.com/jinzhu/configor"
+	"gopkg.in/yaml.v3"
 )
 
+// ConfigProvider is the interface for accessing the current config.
+// Both the Watcher and simple wrappers can implement it, allowing
+// services to receive live config updates without knowing the reload mechanism.
+type ConfigProvider interface {
+	// Get returns the current configuration.
+	Get() *Config
+}
+
 // Watcher reloads configuration periodically, supporting hot-reload.
+// It implements ConfigProvider so services can use it for live config.
 type Watcher struct {
 	mu       sync.RWMutex
 	cfg      *Config
@@ -46,6 +56,7 @@ func (w *Watcher) Stop() {
 }
 
 // Get returns the current configuration snapshot.
+// Implements ConfigProvider.
 func (w *Watcher) Get() *Config {
 	w.mu.RLock()
 	defer w.mu.RUnlock()
@@ -68,7 +79,6 @@ func (w *Watcher) RefreshInterval() time.Duration {
 func (w *Watcher) loop() {
 	defer close(w.doneCh)
 
-	// Enforce minimum refresh interval
 	if w.interval < time.Second {
 		w.interval = time.Second
 	}
@@ -79,14 +89,28 @@ func (w *Watcher) loop() {
 	for {
 		select {
 		case <-ticker.C:
-			var cfg Config
-			if err := configor.Load(&cfg, w.path); err == nil {
-				w.mu.Lock()
-				w.cfg = &cfg
-				w.mu.Unlock()
-			}
+			w.reload()
 		case <-w.stopCh:
 			return
 		}
 	}
+}
+
+func (w *Watcher) reload() {
+	data, err := os.ReadFile(w.path)
+	if err != nil {
+		return
+	}
+	base := DefaultConfig()
+	var fileCfg Config
+	if err := yaml.Unmarshal(data, &fileCfg); err != nil {
+		return
+	}
+	base.Merge(&fileCfg)
+	if err := base.Validate(); err != nil {
+		return
+	}
+	w.mu.Lock()
+	w.cfg = &base
+	w.mu.Unlock()
 }

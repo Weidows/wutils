@@ -3,10 +3,11 @@ module github.com/Weidows/wutils
 go 1.23
 
 require (
+	github.com/binzume/dkango v0.1.6
 	github.com/gogo/protobuf v1.3.2
 	github.com/howcrazy/xconv v0.0.0-20161022181602-be3d9669d8c2
-	github.com/jinzhu/configor v1.2.2
 	github.com/morrisxyang/errors v0.0.0-20230323132346-5e87c521fb94
+	github.com/nwaples/rardecode/v2 v2.2.2
 	github.com/prometheus-community/pro-bing v0.3.0
 	github.com/rwcarlsen/goexif v0.0.0-20190401172101-9e8deecbddbd
 	github.com/sirupsen/logrus v1.9.3
@@ -17,7 +18,6 @@ require (
 
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
-	github.com/binzume/dkango v0.1.6 // indirect
 	github.com/bodgit/plumbing v1.3.0 // indirect
 	github.com/bodgit/windows v1.0.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -25,7 +25,6 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
-	github.com/nwaples/rardecode/v2 v2.2.2 // indirect
 	github.com/pierrec/lz4/v4 v4.1.21 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/ulikunitz/xz v0.5.12 // indirect
@@ -35,7 +34,6 @@ require (
 )
 
 require (
-	github.com/BurntSushi/toml v1.3.2 // indirect
 	github.com/bodgit/sevenzip v1.5.2
 	github.com/cpuguy83/go-md2man/v2 v2.0.3 // indirect
 	github.com/google/uuid v1.6.0 // indirect

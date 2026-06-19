@@ -1,4 +1,3 @@
-// Package service provides the Service implementations for all wutils features.
 package service
 
 import (
@@ -18,14 +17,16 @@ import (
 // DSGService prevents hard drives from sleeping by periodically writing timestamps.
 type DSGService struct {
 	mu       sync.Mutex
-	cfg      *config.DSGConfig
+	cfg      config.ConfigProvider
 	logger   *logrus.Logger
 	cancel   context.CancelFunc
 	status   app.ServiceStatus
 }
 
 // NewDSGService creates a new DSG service.
-func NewDSGService(cfg *config.DSGConfig, logger *logrus.Logger) *DSGService {
+// cfg provides live configuration — use a *config.Watcher for hot-reload support,
+// or a simple wrapper for static config.
+func NewDSGService(cfg config.ConfigProvider, logger *logrus.Logger) *DSGService {
 	if logger == nil {
 		logger = logrus.New()
 	}
@@ -53,7 +54,9 @@ func (s *DSGService) Start() error {
 		return nil
 	}
 
-	if len(s.cfg.Disk) == 0 {
+	// Check disks at start time
+	cfg := s.cfg.Get()
+	if len(cfg.Cmd.Dsg.Disk) == 0 {
 		return fmt.Errorf("dsg: no disks configured")
 	}
 
@@ -85,18 +88,24 @@ func (s *DSGService) run(ctx context.Context) {
 		s.mu.Unlock()
 	}()
 
-	s.logger.Infoln(s.cfg)
-	delay := time.Duration(s.cfg.Delay) * time.Second
-
 	for {
+		// Read config on each iteration to pick up hot-reload changes
+		cfg := s.cfg.Get()
+		dsgCfg := cfg.Cmd.Dsg
+
+		s.logger.Infoln(dsgCfg)
+		delay := time.Duration(dsgCfg.Delay) * time.Second
+
+		// Write timestamps to all configured disks
+		collection.ForEach(dsgCfg.Disk, func(i int, disk string) {
+			writeDSGTimestamp(disk, s.logger)
+		})
+
+		// Wait for the delay or cancellation
 		select {
 		case <-ctx.Done():
 			return
-		default:
-			collection.ForEach(s.cfg.Disk, func(i int, disk string) {
-				writeDSGTimestamp(disk, s.logger)
-			})
-			time.Sleep(delay)
+		case <-time.After(delay):
 		}
 	}
 }

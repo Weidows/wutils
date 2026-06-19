@@ -16,14 +16,15 @@ import (
 // OLService monitors running windows and applies transparency based on matching rules.
 type OLService struct {
 	mu     sync.Mutex
-	cfg    *config.OLConfig
+	cfg    config.ConfigProvider
 	logger *logrus.Logger
 	cancel context.CancelFunc
 	status app.ServiceStatus
 }
 
 // NewOLService creates a new Opacity Listener service.
-func NewOLService(cfg *config.OLConfig, logger *logrus.Logger) *OLService {
+// cfg provides live configuration — use a *config.Watcher for hot-reload support.
+func NewOLService(cfg config.ConfigProvider, logger *logrus.Logger) *OLService {
 	if logger == nil {
 		logger = logrus.New()
 	}
@@ -87,28 +88,31 @@ func (s *OLService) run(ctx context.Context) {
 		s.mu.Unlock()
 	}()
 
-	s.logger.Infoln(s.cfg)
-	delay := time.Duration(s.cfg.Delay) * time.Second
-
 	for {
+		cfg := s.cfg.Get()
+		olCfg := cfg.Cmd.Ol
+
+		s.logger.Infoln(olCfg)
+		delay := time.Duration(olCfg.Delay) * time.Second
+
+		s.applyPatterns(olCfg)
+
 		select {
 		case <-ctx.Done():
 			return
-		default:
-			s.applyPatterns()
-			time.Sleep(delay)
+		case <-time.After(delay):
 		}
 	}
 }
 
-func (s *OLService) applyPatterns() {
+func (s *OLService) applyPatterns(olCfg config.OLConfig) {
 	windows := os2.GetEnumWindowsInfo(&os2.EnumWindowsFilter{
 		IgnoreNoTitled:  true,
 		IgnoreInvisible: true,
 	})
 
 	collection.ForEach(windows, func(i int, window *os2.EnumWindowsResult) {
-		collection.ForEach(s.cfg.Patterns, func(ii int, pattern config.OLPattern) {
+		collection.ForEach(olCfg.Patterns, func(ii int, pattern config.OLPattern) {
 			if grammar.Match(pattern.Title, window.Title) && pattern.Opacity != window.Opacity {
 				os2.SetWindowOpacity(window.Handle, pattern.Opacity)
 			}

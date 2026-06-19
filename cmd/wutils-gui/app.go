@@ -11,6 +11,13 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
+// staticProvider wraps a fixed Config as a ConfigProvider.
+type staticProvider struct {
+	cfg *config.Config
+}
+
+func (p *staticProvider) Get() *config.Config { return p.cfg }
+
 // App struct
 type App struct {
 	ctx       context.Context
@@ -29,9 +36,10 @@ func NewApp() *App {
 	registry := app.NewServiceRegistry()
 
 	cfg := config.DefaultConfig()
+	prov := &staticProvider{cfg: &cfg}
 
-	dsgSvc := service.NewDSGService(&cfg.Cmd.Dsg, nil)
-	olSvc := service.NewOLService(&cfg.Cmd.Ol, nil)
+	dsgSvc := service.NewDSGService(prov, nil)
+	olSvc := service.NewOLService(prov, nil)
 	diffSvc := service.NewDiffService()
 	zipSvc := service.NewZipCrackService()
 	mediaSvc := service.NewMediaService()

@@ -15,14 +15,22 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// staticProvider wraps a fixed Config as a ConfigProvider (no hot-reload).
+type staticProvider struct {
+	cfg *config.Config
+}
+
+func (p *staticProvider) Get() *config.Config { return p.cfg }
+
 // NewApp builds and returns the wutils CLI application.
 func NewApp() *cli.App {
 	logger := log.GetLogger()
 
 	// Shared state
 	var (
-		cfgPath string
-		watcher *config.Watcher
+		cfgPath  string
+		cfgProv  config.ConfigProvider
+		watcher  *config.Watcher
 	)
 
 	// Services (lazily initialized)
@@ -62,14 +70,11 @@ func NewApp() *cli.App {
 				}
 			}
 
-			// Load config and initialize services
+			// Load config
 			cfg, err := config.Load(cfgPath)
 			if err != nil {
 				return fmt.Errorf("failed to load config: %w", err)
 			}
-
-			dsgSvc = service.NewDSGService(&cfg.Cmd.Dsg, logger)
-			olSvc = service.NewOLService(&cfg.Cmd.Ol, logger)
 
 			// Start config watcher for hot-reload
 			interval := cfg.Refresh
@@ -78,6 +83,12 @@ func NewApp() *cli.App {
 			}
 			watcher = config.NewWatcher(cfgPath, time.Duration(cfg.Refresh)*time.Second)
 			watcher.Start()
+
+			// Use watcher as the live config provider for services
+			cfgProv = watcher
+
+			dsgSvc = service.NewDSGService(cfgProv, logger)
+			olSvc = service.NewOLService(cfgProv, logger)
 
 			return nil
 		},
