@@ -59,6 +59,9 @@ func (w *Watcher) Get() *Config {
 
 // RefreshInterval returns the configured refresh interval.
 func (w *Watcher) RefreshInterval() time.Duration {
+	if w.interval < time.Second {
+		return time.Second
+	}
 	return w.interval
 }
 

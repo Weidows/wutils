@@ -8,31 +8,67 @@ permissions:
   packages: write
 
 jobs:
-  releases-matrix:
-    name: Release Go Binary
+  # ---- CLI binary (cross-platform) ----
+  cli-releases-matrix:
+    name: Release CLI Binary
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # build and publish in parallel: linux/386, linux/amd64, linux/arm64, windows/386, windows/amd64, darwin/amd64, darwin/arm64
         goos: [ linux, windows, darwin ]
         goarch: [ amd64, arm64 ]
-        # exclude:
-        #   - goarch: arm64
-        #     goos: windows
     steps:
       - uses: actions/checkout@v4
       - uses: wangyoucao577/go-release-action@v1.55
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          goos: windows
+          goos: ${{ matrix.goos }}
           goarch: ${{ matrix.goarch }}
-          goversion: "https://dl.google.com/go/go1.19.1.linux-amd64.tar.gz"
+          goversion: "https://dl.google.com/go/go1.23.0.linux-amd64.tar.gz"
           project_path: ./cmd/wutils
           asset_name: wutils-cli-${{ matrix.goos }}-${{ matrix.goarch }}
-          extra_files: README.md cmd/wutils/runner/example
-          #          build_command: make DEST=${BUILD_ARTIFACTS_FOLDER}
+          extra_files: README.md config/wutils.yml
           compress_assets: auto
           overwrite: true
-          #          sha256sum: true
           md5sum: true
           build_flags: -buildvcs=false
+
+  # ---- GUI binary (Windows only, requires Wails + Node) ----
+  gui-build:
+    name: Build GUI Binary (Windows)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.23"
+
+      - name: Install Wails CLI
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Build frontend
+        working-directory: cmd/wutils-gui/frontend
+        run: |
+          pnpm install
+          pnpm run build
+
+      - name: Build GUI binary
+        working-directory: cmd/wutils-gui
+        run: |
+          go mod tidy
+          wails build -skipbindings -o wutils-gui-${{ github.ref_name }}.exe
+
+      - name: Upload GUI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wutils-gui-windows-amd64
+          path: cmd/wutils-gui/build/bin/wutils-gui-*.exe
