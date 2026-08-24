@@ -10,50 +10,12 @@ comments: true
 aside: true
 date: 2024-08-06 04:47:19
 top_img:
-cover: https://pan.weidows.tech/d/local/blog/1d36e9d50555af6fca23e5fd36246cf5490809012.jpg
+cover: https://fs.weidows.tech/img/blog/1d36e9d50555af6fca23e5fd36246cf5490809012.jpg
 ---
 
 > https://github.com/Weidows/wutils
 
 # Docs-wutils
-
-<!--
- * @!: *********************************************************************
- * @Author: Weidows
- * @LastEditors: Weidows
- * @Date: 2022-08-30 14:51:11
- * @LastEditTime: 2026-03-03 10:59:18
- * @FilePath: \wutils\README.md
- * @Description:
- * @:
- * ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡏⠻⣄
- * ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣀⣀⣀⣀⠀⠀⠀⠀⠀⣀⡾⠀⠀⣿
- * ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⡶⠟⠛⠉⠉⠀⠀⠀⠀⠀⠀⠉⠉⠛⠻⠿⣤⣀⣠⡴⠋
- * ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⠟⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⠂⠀⠀⠀⠀⠀⠀⠀⠀⠙⢶⣀
- * ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡾⠉⠀⠀⠀⠀⠀⠀⡴⠁⠀⠀⠀⡞⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⣄
- * ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⠋⠀⠀⠀⠀⠀⠀⢠⠏⠀⠀⠀⠀⡾⠀⠀⠀⠀⠀⠀⠀⠀⢰⠀⠀⠀⠀⠀⠀⠈⢷⡀
- * ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡿⠀⠀⠀⠀⠀⠀⠀⣠⠃⠀⠀⠀⠀⢰⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⠀⠀⠀⠀⠀⠀⠀⠙⣄
- * ⠀⠀⠀⠀⠀⠀⠀⠀⠀⡿⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⣀⣿⢠⠀⠀⠀⠀⠀⠀⠀⠀⣶⠀⣧⠀⠀⠀⠀⠀⠀⠀⠈⣆
- * ⠀⠀⠀⠀⠀⠀⠀⠀⣼⠁⠀⣰⠀⠀⠀⠀⣾⢸⣿⣀⣤⣶⡛⠁⣿⠘⡄⠀⠀⠀⠀⢀⠀⠀⣿⠀⢻⠀⠀⠀⠀⠀⠀⠀⠀⠸
- * ⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⡟⠀⠀⠀⠀⣿⡈⡏⠀⠀⠀⠀⠙⡜⡄⢿⠀⠀⠀⠀⣾⣧⣾⢸⠀⢸⠀⠀⡇⠀⠀⠀⠀⠀⠀⡇
- * ⠀⠀⠀⠀⠀⠀⠀⢀⡇⠀⠀⣇⠀⠀⠀⠀⣷⣿⣿⣶⣦⣀⠀⠀⠀⠹⡘⣿⡀⠀⠀⢹⣿⠃⢸⠀⣿⠀⢠⣿⠀⠀⠀⠀⠀⣄⣧
- * ⠀⠀⠀⠀⠀⠀⠀⣼⠀⠀⠀⣿⠀⠀⠀⠀⢿⠉⠉⠉⠻⣿⣷⡀⠀⠀⠈⠁⠙⢦⣀⣸⠋⠈⣸⣼⢻⠀⣾⡿⠀⠀⠀⠀⢸⢸⣿
- * ⠀⠀⠀⠀⠀⠀⠀⣿⠀⣿⠀⠸⡄⣤⠀⠀⠀⣧⠀⠀⠀⠀⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠀⠀⣿⣿⠇⠀⠀⠀⠀⣾⢸⣿
- * ⠀⠀⠀⠀⠀⠀⢰⡇⠀⣿⠀⠀⠙⠿⣿⠛⠒⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⣿⣿⣦⡀⡿⠀⠀⠀⠀⠀⣿⣿⣿
- * ⠀⠀⠀⠀⠀⠀⣿⠀⣴⠋⠙⣦⠀⠀⠀⣇⠀⠀⠀⠀⠀⠀⣼⠉⠙⠳⠦⣤⡀⠀⠀⠀⠀⠀⠀⠈⠻⡿⠀⠀⠀⠀⠀⠀⣿⣿⣿
- * ⠀⠀⠀⠀⠀⠀⣿⢤⠇⣀⡀⣼⠀⠀⠀⢹⠀⠀⠀⠀⠀⢸⠁⠀⠀⠀⠀⢰⠁⠀⠀⠀⠀⠀⠀⣠⠟⠀⠀⠀⠀⠀⠀⢠⣯⣿⣿
- * ⠀⠀⠀⠀⣠⠋⣠⠟⠁⠀⠈⠛⣄⠀⠀⠀⣇⠀⠀⠀⠀⢹⠀⠀⠀⠀⢀⠟⠀⠀⠀⠀⠀⠀⢾⣁⠀⠀⠀⠀⢀⣾⣤⡏⠉⠉⣿
- * ⠀⠀⢀⣞⠤⣴⠁⠀⠀⠀⠀⠀⠀⣧⠀⠀⢿⠉⠳⣤⡀⠀⠁⠀⠠⠶⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠧⣴⣾⣿⣿⠟⡇⠀⠀⢸
- * ⣠⠚⠁⢀⠏⣿⠀⠀⠀⠀⠀⠀⠀⠸⡀⠀⠈⡏⠛⠶⣤⡉⠛⠶⢤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⣀⡴⣿⣿⠟⠁⠀⠀⡇⠀⠀⢸
- * ⠀⠀⠀⢸⠀⠘⡄⠀⠀⠀⠀⠀⢹⠀⡿⡄⠀⣿⠀⠀⠀⠀⠙⠲⣤⡀⠙⢦⠉⠉⠉⠉⠉⠉⠁⠀⠀⣿⠀⠀⠀⠀⠀⡇⠀⠀⢸
- * ⠀⠀⠀⠘⡄⠀⣿⠀⠀⠀⠀⠀⣸⠛⡄⢻⠀⠸⡀⠀⠀⠀⠀⠀⠀⠈⠛⢦⡉⢦⡀⠀⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⢰⠇⠀⠀⢸
- * ⠀⠀⠀⠀⢿⠀⠈⠙⢦⣄⣠⠴⠃⢠⠃⠀⡇⠀⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢾⣦⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⣼⠀⠀⠀⠀⡇
- * ⠀⠀⠀⠀⠀⠙⢤⠀⠀⠀⠀⠀⡴⠋⠀⠀⡇⠀⢿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⣄⠀⠀⠀⡿⠀⠀⠀⠀⡿⠀⠀⠀⠀⡇
- * ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡇⠀⠘⣿⣿⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠳⠀⠀⡇⠀⠀⠀⢰⠁⠀⠀⠀⠀⡇
- * ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡾⠀⠀⠀⣿⣿⣿⣿⣷⣶⣶⣤⣄⠀⠀⠀⠀⠀⠀⠀⠀⢸⠁⠀⠀⠀⡿⠀⠀⠀⠀⠀⣷
- *
- * @?: *********************************************************************
--->
 
 {% pullquote mindmap mindmap-sm %}
 
@@ -65,7 +27,6 @@ cover: https://pan.weidows.tech/d/local/blog/1d36e9d50555af6fca23e5fd36246cf5490
       - [ol-Opacity\_Listener](#ol-opacity_listener)
         - [特点-feature](#特点-feature)
         - [教程-tutorial](#教程-tutorial)
-      - [dsg-Disk\_sleep\_guard](#dsg-disk_sleep_guard)
       - [diff](#diff)
       - [zip](#zip)
         - [crack](#crack)
@@ -84,10 +45,14 @@ cover: https://pan.weidows.tech/d/local/blog/1d36e9d50555af6fca23e5fd36246cf5490
     - [zip](#zip-1)
   - [Utils](#utils)
   - [借物表](#借物表)
+  - [新架构 (v0.2+)](#新架构-v02)
+    - [项目结构](#项目结构)
+    - [开发](#开发)
+    - [GUI 功能](#gui-功能)
 
 {% endpullquote %}
 
-<a>![分割线](https://pan.weidows.tech/d/local/img/divider.png)</a>
+<a>![分割线](https://fs.weidows.tech/img/img/divider.png)</a>
 
 ## install
 
@@ -104,7 +69,7 @@ https://github.com/Weidows/wutils/releases
 > 默认配置 | default config: https://github.com/Weidows/wutils/tree/master/config \
 > 如果是 scoop / release 安装, 配置会在压缩包内
 
-<a>![分割线](https://pan.weidows.tech/d/local/img/divider.png)</a>
+<a>![分割线](https://fs.weidows.tech/img/img/divider.png)</a>
 
 ## Cmd
 
@@ -158,7 +123,7 @@ wutils 部分子程序设计为根据 [配置文件](https://github.com/Weidows/
 
 后台持续运行并控制窗口透明化的程序, 如图:
 
-![1702005541764](https://pan.weidows.tech/d/local/blog/1702005541764.jpg)
+![1702005541764](https://fs.weidows.tech/img/blog/1702005541764.jpg)
 
 只在 windows 平台使用和测试过, 其他平台可能会有 bug
 
@@ -382,7 +347,7 @@ cmd:
 - 仅支持 Windows 平台
 - 建议配合 SSD 使用以获得最佳性能
 
-<a>![分割线](https://pan.weidows.tech/d/local/img/divider.png)</a>
+<a>![分割线](https://fs.weidows.tech/img/img/divider.png)</a>
 
 ## Pkg
 
@@ -392,7 +357,7 @@ cmd:
 
 用于破解压缩文件的包, 上面 cmd 中有调用
 
-<a>![分割线](https://pan.weidows.tech/d/local/img/divider.png)</a>
+<a>![分割线](https://fs.weidows.tech/img/img/divider.png)</a>
 
 ## Utils
 
